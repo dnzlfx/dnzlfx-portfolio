@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-reduced-motion="false">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dnzlfx — Christian Denzel | Local-First AI, Linux Infrastructure &amp; Web Systems</title>
+  <meta name="description" content="Portfolio prototype for Christian Denzel (dnzlfx) — Local-first AI agents, Linux homelab automation, and modern web engineering. Built with native HTML/CSS/JS." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Ambient Purple Viewport Border Frame -->
+  <div class="dx-frame" aria-hidden="true"></div>
+
+  <!-- Live Scroll & Parallax Telemetry HUD -->
+  <aside class="dx-hud" aria-label="Live scroll parallax telemetry">
+    <span class="dx-hud-item">
+      <span class="dx-hud-label">scrollY</span>
+      <span class="dx-hud-val" id="hud-scroll">0px</span>
+    </span>
+    <span class="dx-hud-item">
+      <span class="dx-hud-label">--nw-shift</span>
+      <span class="dx-hud-val" id="hud-shift">+0.0px</span>
+    </span>
+    <span class="dx-hud-item">
+      <span class="dx-hud-label">--py-img</span>
+      <span class="dx-hud-val" id="hud-py-img">+0.0px</span>
+    </span>
+  </aside>
+
+  <!-- Symmetrical Top Navigation Bar -->
+  <header class="dx-header">
+    <nav class="dx-nav" aria-label="Primary navigation">
+      <a class="dx-brand" href="#top" aria-label="dnzlfx — Christian Denzel, back to top">
+        <span class="dx-brand-mark">dnzlfx</span>
+        <span class="dx-brand-name">Christian Denzel</span>
+      </a>
+
+      <ul class="dx-nav-links">
+        <li><a class="dx-nav-link" href="#mission">Architecture</a></li>
+        <li><a class="dx-nav-link" href="#projects">Projects</a></li>
+        <li><a class="dx-nav-link" href="#about">About</a></li>
+        <li><a class="dx-nav-link" href="#contact">Contact</a></li>
+        <li>
+          <a class="dx-nav-link dx-nav-link--ext" href="https://github.com/dnzlfx" target="_blank" rel="noopener noreferrer">
+            GitHub<span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+
+      <button type="button" class="dx-motion-btn" id="motion-toggle" aria-pressed="false" title="Toggle parallax and scroll animations">
+        <span id="motion-label">Motion: Fluid</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main-content" class="dx-stage">
+    <!-- ======================================================================
+         1. HERO SECTION (Hermes 2-Col Split + --nw-hero-progress & --py-hero)
+         ====================================================================== -->
+    <section id="top" class="dx-hero" aria-labelledby="hero-heading">
+      <div class="dx-hero-grid nw-hero-fade">
+        <!-- Left Column: Copy with --hw-hero-lag: 0.42 -->
+        <div class="dx-hero-copy hw-hero-parallax" style="--hw-hero-lag: 0.42;">
+          <div class="dx-eyebrow">
+            <span class="dx-eyebrow-pill" aria-hidden="true"></span>
+            <span>CHRISTIAN DENZEL · @DNZLFX · VERIFIED GITHUB REPOS</span>
+          </div>
+
+          <h1 id="hero-heading" class="dx-hero-title">
+            LOCAL-FIRST <em>AI</em><br />
+            SYSTEMS THAT<br />
+            RUN ON YOUR METAL
+          </h1>
+
+          <p class="dx-hero-lead">
+            Independent software engineer building <strong>autonomous local-first AI agents</strong>,
+            <strong>multimodal voice/vision assistants</strong>, <strong>RAG verification pipelines</strong>,
+            and resilient <strong>Linux homelab infrastructure</strong>—engineered for full user control
+            without cloud lock-in.
+          </p>
+
+          <div class="dx-cta-row">
+            <a class="dx-btn dx-btn--primary" href="#projects">Explore Verified Projects ↓</a>
+            <a class="dx-btn dx-btn--secondary" href="https://github.com/dnzlfx" target="_blank" rel="noopener noreferrer">GitHub Profile (@dnzlfx) ↗</a>
+          </div>
+
+          <div class="dx-hero-meta" role="list" aria-label="Core technical focus areas">
+            <div class="dx-meta-stat" role="listitem">
+              <span class="dx-meta-kicker">01 / RUNTIME</span>
+              <span class="dx-meta-value">Local LLMs &amp; Agent Loops</span>
+            </div>
+            <div class="dx-meta-stat" role="listitem">
+              <span class="dx-meta-kicker">02 / INFRASTRUCTURE</span>
+              <span class="dx-meta-value">Linux, Docker, Nginx, SSH</span>
+            </div>
+            <div class="dx-meta-stat" role="listitem">
+              <span class="dx-meta-kicker">03 / INTERFACES</span>
+              <span class="dx-meta-value">React, TypeScript, Python</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Dithered Totem Plate with --hw-hero-lag: 1.0 & Duotone Reveal -->
+        <div class="dx-hero-art-wrap hw-hero-parallax" style="--hw-hero-lag: 1;">
+          <div class="dx-hero-plate" tabindex="0" aria-label="Interactive dithered cyber-celestial totem illustration. Hover or focus to reveal electric purple duotone layer.">
+            <img
+              class="nw-mission-image nw-color-reveal"
+              src="./assets/hero-totem-mono.png"
+              alt="Monochrome dithered engraving of a cyber-celestial astrolabe and winged neural core"
+              width="900"
+              height="1100"
+            />
+            <img
+              class="nw-mission-image nw-mission-color nw-color-reveal"
+              src="./assets/hero-totem-color.png"
+              alt=""
+              aria-hidden="true"
+              width="900"
+              height="1100"
+            />
+            <div class="dx-hero-plate-caption">
+              <span>PLATE I · BAYER 8×8 ENGRAVING</span>
+              <span>HOVER / SCROLL REVEAL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. EDITORIAL ARCHITECTURE SECTION (Nous #mission style:
+            --nw-mission-shift + scale(1.08) + double <img> duotone + alternating rows)
+         ====================================================================== -->
+    <section id="mission" class="nw-mission-wrap" aria-labelledby="mission-heading">
+      <div class="nw-mission">
+        <!-- Top Panoramic Banner -->
+        <div class="nw-mission-hero" tabindex="0">
+          <img
+            class="nw-mission-image nw-color-reveal"
+            src="./assets/mission-header-mono.png"
+            alt="Panoramic dithered horizon showing four retro terminal monoliths flanking a rising celestial core"
+            width="1440"
+            height="640"
+          />
+          <img
+            class="nw-mission-image nw-mission-color nw-color-reveal"
+            src="./assets/mission-header-color.png"
+            alt=""
+            aria-hidden="true"
+            width="1440"
+            height="640"
+          />
+          <div class="nw-mission-banner-overlay">
+            <h2 id="mission-heading" class="nw-mission-banner-title nw-mission-reveal" data-pending style="--nw-reveal-delay: 0ms;">
+              ENGINEERING <em>PHILOSOPHY</em><br />
+              &amp; SYSTEM ARCHITECTURE
+            </h2>
+            <span class="nw-mission-banner-badge nw-mission-reveal" data-pending style="--nw-reveal-delay: 90ms;">
+              MECHANISM 01 · --NW-MISSION-SHIFT PARALLAX
+            </span>
+          </div>
+        </div>
+
+        <!-- Row 01: Local-First AI & Autonomous Tooling -->
+        <article class="nw-mission-row">
+          <div class="nw-mission-copy">
+            <span class="nw-mission-index nw-mission-reveal" data-pending style="--nw-reveal-delay: 0ms;">
+              PILLAR 01 // SOVEREIGN COMPUTE
+            </span>
+            <h3 class="nw-mission-heading nw-mission-reveal" data-pending style="--nw-reveal-delay: 45ms;">
+              AUTONOMOUS AGENTS ON LOCAL HARDWARE
+            </h3>
+            <p class="nw-mission-reveal" data-pending style="--nw-reveal-delay: 90ms;">
+              From terminal-first assistants like <strong>Vyn</strong> to multi-provider local routers,
+              every tool in the <code>dnzlfx</code> ecosystem prioritizes direct execution on your own Linux nodes.
+              Explicit safety policies, role-based access control, and SSH homelab orchestration ensure
+              high-autonomy workflows stay auditable and deterministic.
+            </p>
+            <div class="nw-mission-spec-pills nw-mission-reveal" data-pending style="--nw-reveal-delay: 135ms;">
+              <span class="nw-spec-pill">Python 3.12+</span>
+              <span class="nw-spec-pill">TypeScript</span>
+              <span class="nw-spec-pill">SSH Automation</span>
+              <span class="nw-spec-pill">RBAC &amp; Audit Logs</span>
+            </div>
+          </div>
+
+          <div class="nw-mission-art" tabindex="0">
+            <span class="nw-art-tag">FIG 1.1 · NEURAL TOPOLOGY</span>
+            <img
+              class="nw-mission-image nw-color-reveal"
+              src="./assets/mission-duo-1-mono.png"
+              alt="Dithered illustration of a central shaded sphere linked to six orbital compute nodes"
+              width="840"
+              height="520"
+            />
+            <img
+              class="nw-mission-image nw-mission-color nw-color-reveal"
+              src="./assets/mission-duo-1-color.png"
+              alt=""
+              aria-hidden="true"
+              width="840"
+              height="520"
+            />
+          </div>
+        </article>
+
+        <!-- Row 02 (Reversed): Multimodal Perception & Grounded RAG -->
+        <article class="nw-mission-row" data-reverse>
+          <div class="nw-mission-copy">
+            <span class="nw-mission-index nw-mission-reveal" data-pending style="--nw-reveal-delay: 0ms;">
+              PILLAR 02 // MULTIMODAL &amp; VERIFIED RAG
+            </span>
+            <h3 class="nw-mission-heading nw-mission-reveal" data-pending style="--nw-reveal-delay: 45ms;">
+              VOICE, SCREEN VISION &amp; CITATION GATES
+            </h3>
+            <p class="nw-mission-reveal" data-pending style="--nw-reveal-delay: 90ms;">
+              Real-world interfaces demand more than a text box. <strong>Samantha</strong> pairs live screen/camera
+              awareness with push-to-talk voice and session canvases, while <strong>AppealForge</strong> enforces
+              hybrid dense/BM25 retrieval with strict citation verification so generated documents never hallucinate
+              unsupported claims.
+            </p>
+            <div class="nw-mission-spec-pills nw-mission-reveal" data-pending style="--nw-reveal-delay: 135ms;">
+              <span class="nw-spec-pill">FastAPI</span>
+              <span class="nw-spec-pill">Hybrid RAG (Dense + BM25)</span>
+              <span class="nw-spec-pill">Vision &amp; Audio Streams</span>
+              <span class="nw-spec-pill">React + Vite</span>
+            </div>
+          </div>
+
+          <div class="nw-mission-art" tabindex="0">
+            <span class="nw-art-tag">FIG 1.2 · OPTICAL &amp; AUDIO SPECTRUM</span>
+            <img
+              class="nw-mission-image nw-color-reveal"
+              src="./assets/mission-duo-2-mono.png"
+              alt="Dithered optical iris next to an audio frequency waveform spectrogram"
+              width="840"
+              height="520"
+            />
+            <img
+              class="nw-mission-image nw-mission-color nw-color-reveal"
+              src="./assets/mission-duo-2-color.png"
+              alt=""
+              aria-hidden="true"
+              width="840"
+              height="520"
+            />
+          </div>
+        </article>
+
+        <!-- Row 03: Fluid Scroll Physics Without Hijacking -->
+        <article class="nw-mission-row">
+          <div class="nw-mission-copy">
+            <span class="nw-mission-index nw-mission-reveal" data-pending style="--nw-reveal-delay: 0ms;">
+              PILLAR 03 // ZERO-HIJACK INTERFACES
+            </span>
+            <h3 class="nw-mission-heading nw-mission-reveal" data-pending style="--nw-reveal-delay: 45ms;">
+              FLUID IMAGE SCROLL &amp; ACCESSIBLE MOTION
+            </h3>
+            <p class="nw-mission-reveal" data-pending style="--nw-reveal-delay: 90ms;">
+              This portfolio prototype demonstrates continuous scroll-linked image transformations using native
+              <code>requestAnimationFrame</code> and CSS Custom Properties (<code>--nw-mission-shift</code>,
+              <code>--py-img</code>, <code>--py</code>). Native scrollbar, keyboard navigation, touch inertia, and
+              <code>prefers-reduced-motion</code> remain 100% intact.
+            </p>
+            <div class="nw-mission-spec-pills nw-mission-reveal" data-pending style="--nw-reveal-delay: 135ms;">
+              <span class="nw-spec-pill">Zero Dependencies</span>
+              <span class="nw-spec-pill">Passive Scroll Listeners</span>
+              <span class="nw-spec-pill">Bayer 8×8 Dither</span>
+              <span class="nw-spec-pill">WCAG AA Contrast</span>
+            </div>
+          </div>
+
+          <div class="nw-mission-art" tabindex="0">
+            <span class="nw-art-tag">FIG 1.3 · TORUS PHASE FIELD</span>
+            <img
+              class="nw-mission-image nw-color-reveal"
+              src="./assets/mission-duo-3-mono.png"
+              alt="Dithered geometric torus ring phase diagram with celestial stars"
+              width="840"
+              height="520"
+            />
+            <img
+              class="nw-mission-image nw-mission-color nw-color-reveal"
+              src="./assets/mission-duo-3-color.png"
+              alt=""
+              aria-hidden="true"
+              width="840"
+              height="520"
+            />
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. FEATURED PROJECTS GRID (Hermes .hw-feature-parallax + .hw-feature-panel
+            + .landing-feature-art > figure + .hw-parallax scale(1.22) + --py-img)
+         ====================================================================== -->
+    <section id="projects" class="hw-feature-parallax" aria-labelledby="projects-heading">
+      <div class="hw-feature-panel">
+        <div class="dx-section-header">
+          <div>
+            <div class="dx-eyebrow">
+              <span class="dx-eyebrow-pill" aria-hidden="true"></span>
+              <span>DEMONSTRATION SHOWCASE · REAL PUBLIC REPOSITORIES OF @DNZLFX</span>
+            </div>
+            <h2 id="projects-heading" class="dx-section-title">
+              VERIFIED <em>PROJECTS</em> &amp; REPOSITORIES
+            </h2>
+          </div>
+          <p class="dx-section-sub">
+            Every card below links directly to an existing public repository under
+            <strong>github.com/dnzlfx</strong>. Artwork inside each frame scales to <code>1.22</code>
+            and translates continuously via <code>--py-img</code> as you scroll.
+          </p>
+        </div>
+
+        <div class="landing-feature-grid">
+          <!-- Card 1: Vyn -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">Python · CLI · SSH</span>
+              </div>
+              <h3 class="landing-feature-title">VYN</h3>
+              <p class="landing-feature-desc">
+                Local-first autonomous AI assistant with terminal CLI, web dashboard, RBAC,
+                scheduled jobs, and SSH homelab automation.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-vyn-mono.png"
+                    alt="Dithered illustration of Vyn terminal interface and spherical security core"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-vyn-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/Vyn" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/Vyn ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+
+          <!-- Card 2: Samantha -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">TypeScript · React · Python</span>
+              </div>
+              <h3 class="landing-feature-title">SAMANTHA</h3>
+              <p class="landing-feature-desc">
+                Multimodal desktop &amp; web AI copilot with push-to-talk voice, screen/camera awareness,
+                live session canvas, and local companion daemon.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-samantha-mono.png"
+                    alt="Dithered illustration of Samantha optical vision iris and radial starburst"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-samantha-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/Samantha" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/Samantha ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+
+          <!-- Card 3: AppealForge -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">Python · FastAPI · RAG</span>
+              </div>
+              <h3 class="landing-feature-title">APPEALFORGE</h3>
+              <p class="landing-feature-desc">
+                AI-powered medical necessity appeal generator using hybrid RAG (dense + BM25)
+                over clinical guidelines with strict citation verification.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-appealforge-mono.png"
+                    alt="Dithered illustration of layered clinical documents and verification seal"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-appealforge-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/AppealForge" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/AppealForge ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+
+          <!-- Card 4: FoxTube -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">TypeScript · Docker · Nginx</span>
+              </div>
+              <h3 class="landing-feature-title">FOXTUBE</h3>
+              <p class="landing-feature-desc">
+                Self-hosted media streaming platform built with React, Vite, Express,
+                Docker Compose, and Nginx reverse proxy.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-foxtube-mono.png"
+                    alt="Dithered illustration of a media broadcast prism and concentric signal rings"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-foxtube-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/FoxTube" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/FoxTube ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+
+          <!-- Card 5: local-ai-assistant -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">Python · Local LLMs</span>
+              </div>
+              <h3 class="landing-feature-title">LOCAL-AI-ASSISTANT</h3>
+              <p class="landing-feature-desc">
+                Local AI desktop &amp; web assistant supporting hot model switching,
+                persistent memory, and optional web context enrichment.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-local-ai-mono.png"
+                    alt="Dithered illustration of an orbital model-switching constellation"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-local-ai-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/local-ai-assistant" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/local-ai-assistant ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+
+          <!-- Card 6: Physicsmon- -->
+          <article class="landing-feature">
+            <div class="landing-feature-top">
+              <div class="landing-feature-meta">
+                <span class="landing-feature-badge">FEATURED REPO</span>
+                <span class="landing-feature-lang">JavaScript · HTML5 Canvas</span>
+              </div>
+              <h3 class="landing-feature-title">PHYSICSMON</h3>
+              <p class="landing-feature-desc">
+                Interactive 2D browser game combining creature battles with real-time
+                projectile and arena physics in vanilla JavaScript.
+              </p>
+            </div>
+
+            <div class="landing-feature-art">
+              <figure>
+                <div class="hw-noise">
+                  <img
+                    class="hw-parallax"
+                    src="./assets/feature-physicsmon-mono.png"
+                    alt="Dithered illustration of parabolic projectile trajectories and colliding spheres"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                  <img
+                    class="hw-parallax nw-mission-color"
+                    src="./assets/feature-physicsmon-color.png"
+                    alt=""
+                    aria-hidden="true"
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+
+            <div class="landing-feature-footer">
+              <a class="landing-feature-link" href="https://github.com/dnzlfx/Physicsmon-" target="_blank" rel="noopener noreferrer">
+                github.com/dnzlfx/Physicsmon- ↗
+              </a>
+              <span class="landing-feature-drift-readout">py: +0.0px</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. ABOUT & HONEST CONTACT SECTION (Zero fabricated data)
+         ====================================================================== -->
+    <section id="about" class="dx-about-section" aria-labelledby="about-heading">
+      <!-- Left Card: About & Verified Tech Stack -->
+      <div class="dx-card-panel">
+        <span class="nw-mission-index">04 // PROFILE &amp; TOOLCHAIN</span>
+        <h2 id="about-heading">ABOUT CHRISTIAN DENZEL (DNZLFX)</h2>
+        <p>
+          Software builder focused on <strong>local-first artificial intelligence</strong>,
+          <strong>Linux infrastructure</strong>, and <strong>responsive web applications</strong>.
+          Work centers on giving developers and operators complete ownership over their models,
+          telemetry, and execution environments.
+        </p>
+
+        <div class="dx-stack-group">
+          <span class="dx-stack-label">LANGUAGES &amp; RUNTIMES</span>
+          <div class="dx-stack-badges">
+            <span class="dx-chip">Python</span>
+            <span class="dx-chip">TypeScript</span>
+            <span class="dx-chip">JavaScript (ES2024)</span>
+            <span class="dx-chip">Bash / POSIX Shell</span>
+            <span class="dx-chip">HTML5 &amp; CSS3</span>
+          </div>
+        </div>
+
+        <div class="dx-stack-group">
+          <span class="dx-stack-label">FRAMEWORKS, INFRASTRUCTURE &amp; AI</span>
+          <div class="dx-stack-badges">
+            <span class="dx-chip">React</span>
+            <span class="dx-chip">Vite</span>
+            <span class="dx-chip">FastAPI</span>
+            <span class="dx-chip">Node.js</span>
+            <span class="dx-chip">Docker Compose</span>
+            <span class="dx-chip">Nginx</span>
+            <span class="dx-chip">Linux Homelab / SSH</span>
+            <span class="dx-chip">Hybrid RAG (Dense + BM25)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Card: Contact & Provenance -->
+      <div id="contact" class="dx-card-panel">
+        <span class="nw-mission-index">05 // VERIFIED CHANNELS &amp; PROVENANCE</span>
+        <h3>CONTACT &amp; REPOSITORY LINKS</h3>
+        <p>
+          This local demonstration prototype includes only verified public data from
+          <code>github.com/dnzlfx</code>. No unverified phone numbers, employers, or third-party
+          emails are fabricated.
+        </p>
+
+        <div class="dx-honest-notice">
+          PROTOTYPE NOTICE: All dithered monochrome &amp; purple-duotone illustrations in
+          <code>./assets/</code> are 100% original procedural graphics generated specifically for
+          <code>dnzlfx-portfolio-demo</code>. Zero proprietary assets or fonts from Nous Research
+          were copied.
+        </div>
+
+        <ul class="dx-contact-list" aria-label="Verified public links">
+          <li class="dx-contact-item">
+            <span>GitHub Profile</span>
+            <a href="https://github.com/dnzlfx" target="_blank" rel="noopener noreferrer">github.com/dnzlfx ↗</a>
+          </li>
+          <li class="dx-contact-item">
+            <span>Profile README &amp; Stats</span>
+            <a href="https://github.com/dnzlfx/dnzlfx" target="_blank" rel="noopener noreferrer">github.com/dnzlfx/dnzlfx ↗</a>
+          </li>
+          <li class="dx-contact-item">
+            <span>Additional Public Repos</span>
+            <a href="https://github.com/dnzlfx?tab=repositories" target="_blank" rel="noopener noreferrer">View all 10 public repos ↗</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dx-footer">
+    <div class="dx-footer-inner">
+      <span>© 2026 CHRISTIAN DENZEL (DNZLFX) · LOCAL PROTOTYPE DEMO</span>
+      <span>BLACK &amp; ELECTRIC PURPLE EDITION · NATIVE HTML/CSS/JS</span>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

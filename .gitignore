@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+
+# Internal QA & temporary capture harnesses / raw dumps
+qa-verify/
+evidence-qa-t_f44a2c7b/
+capture_evidence.cjs
+capture_header_comparison.cjs
+evidence/dnzlfx-portfolio-scroll-demo.mp4
+evidence/header-*
+evidence/*.json
+evidence/README.md
