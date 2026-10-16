@@ -20,7 +20,7 @@ import {
   WHEEL_LAMBDA,
 } from "./app.js";
 
-const dir = "/mnt/datos/proyectos/dnzlfx-portfolio-demo";
+const dir = path.dirname(new URL(import.meta.url).pathname);
 
 // 1. Test clamp
 assert.equal(clamp(5, -1, 1), 1);
@@ -98,7 +98,7 @@ const assetMatches = [...html.matchAll(/(?:src|href)="\.\/assets\/([^"]+)"/g)].m
 assert.ok(assetMatches.length >= 25, `Expected at least 25 asset tags, found ${assetMatches.length}`);
 assert.ok(assetMatches.includes("favicon-32.png"), "Missing favicon-32.png in index.html");
 assert.ok(assetMatches.includes("dnzlfx-avatar.png"), "Missing dnzlfx-avatar.png in index.html");
-assert.ok(assetMatches.includes("hero-anime-mono.png") && assetMatches.includes("hero-anime-color.png"), "Missing hero anime plate assets in index.html");
+assert.ok(assetMatches.includes("hero-abstract-mono.png") && assetMatches.includes("hero-abstract-color.png"), "Missing hero abstract plate assets in index.html");
 assert.ok(assetMatches.includes("footer-anime-mono.png") && assetMatches.includes("footer-anime-color.png"), "Missing footer mural assets in index.html");
 const featureCards = (html.match(/class="landing-feature"/g) || []).length;
 assert.equal(featureCards, 4, `Expected 4 project cards, found ${featureCards}`);
