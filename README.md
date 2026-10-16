@@ -1,36 +1,56 @@
-# dnzlfx — Portfolio Demo
+# Christian Denzel (dnzlfx) — Portfolio
 
-Personal software engineering portfolio prototype for **Christian Denzel (`dnzlfx`)**, built with zero-dependency vanilla HTML, CSS, and JavaScript.
+Personal portfolio for **Christian Denzel Guzmán Ramírez** (`dnzlfx`), a 5th-semester
+**B.S. in Information Technology Engineering** student at **UPSLP** (Universidad
+Politécnica de San Luis Potosí), San Luis Potosí, MX.
 
-> **Disclaimer:** This project is an independent personal portfolio demo inspired by the dark/violet editorial aesthetic of Nous Research. It is **not** affiliated with, endorsed by, or connected to Nous Research, and it uses **no** Nous Research trademarks, logos, or proprietary assets. All artwork in `assets/` is procedurally generated in-repo (`generate_assets.py`).
+Built as a single static page with **native HTML, CSS and JavaScript** — no framework,
+no build step, no runtime dependencies.
 
-## Features
+## What's in it
 
-- **Zero runtime dependencies:** Pure `index.html`, `styles.css`, and `app.js` — runs directly on any static file server.
-- **Lenis-style damped wheel & parallax scroll:** Smooth `requestAnimationFrame` damping (`--py-hero`, `--nw-mission-shift`, `--py`, `--py-img`) with monochrome-to-color scroll reveal plates.
-- **Accessibility & Reduced Motion:** Full `prefers-reduced-motion` support (plus an interactive UI toggle), keyboard focus rings, and WCAG AA contrast compliance (`>= 6.0:1`).
-- **Procedural Duotone Artwork:** Reproducible SVG/PNG asset generator (`generate_assets.py`) producing paired monochrome and violet/magenta plates.
+- **Hero** — editorial headline with a large Bayer-dithered portrait illustration
+  that fades into the page background.
+- **How I build** — three editorial rows on local-first autonomy, citation-verified
+  retrieval, and the balance between architecture and interface.
+- **Projects** — a 2×2 grid of the four projects I want people to look at:
+  Vyn & Samantha, AppealForge, FoxTube and Physicsmon.
+- **About** — bio, languages and frameworks.
+- **Contact** — email, GitHub, education.
 
-## Quick Start
+## Artwork
 
-Serve the directory with any static HTTP server:
+Every illustration in `assets/` (hero portrait, section plates, project frames,
+footer mural) is generated locally by `generate_assets.py`:
 
-```bash
-python3 -m http.server 8080
-```
+1. Source illustration → greyscale (`ImageOps.autocontrast` + tone curve).
+2. Fade into the page background `#07060B` **in the greyscale domain**, before
+   dithering, so the halftone stays crisp at the edges.
+3. Ordered **Bayer 8×8 dither** into a silver monochrome ramp and a purple duotone
+   (`#6D28D9` / `#A855F7` / `#C084FC` on `#07060B`), written as `*-mono.png` and
+   `*-color.png`.
 
-Then open `http://localhost:8080` in your browser.
+Requirements: Python 3 with Pillow. `python3 generate_assets.py` regenerates the
+whole `assets/` set (the procedural renderer is kept as an offline fallback).
 
-## Verification
+## Scroll engine
 
-Run the scroll-math and binding verification suite:
+`app.js` is a native ES module that reads scroll position and writes CSS custom
+properties (`--nw-hero-progress`, `--py-hero`, `--nw-mission-shift`, `--py`,
+`--py-img`). It never takes over the scrollbar: wheel momentum is animated onto the
+real scroll position, so the native scrollbar, keyboard paging, anchors and touch all
+keep working. `prefers-reduced-motion` and the header toggle disable every transform.
+
+## Tests
 
 ```bash
 node test_scroll_math.mjs
 ```
 
-Visual screenshots and the continuous smooth-scroll walkthrough recording (`< 25 MB`, self-produced) are available under [`evidence/`](./evidence/).
+Ten assertion suites cover the scroll/parallax math, the frame-rate-independent
+damping, and that every asset referenced by `index.html` exists on disk.
 
-## License
+## Links
 
-MIT License — Copyright (c) 2026 Christian Denzel (`dnzlfx`).
+- GitHub: [github.com/dnzlfx](https://github.com/dnzlfx)
+- Email: guzmanramirezchristian@outlook.com

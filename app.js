@@ -107,11 +107,6 @@ export function initPortfolioScroll() {
   const motionBtn = document.getElementById("motion-toggle");
   const motionLabel = document.getElementById("motion-label");
 
-  // HUD telemetry elements
-  const hudScroll = document.getElementById("hud-scroll");
-  const hudShift = document.getElementById("hud-shift");
-  const hudPyImg = document.getElementById("hud-py-img");
-
   let manualReduced = false;
   const isReducedMotion = () => manualReduced || motionMedia.matches;
 
@@ -222,9 +217,6 @@ export function initPortfolioScroll() {
           img.style.setProperty("--py-img", "0px");
         }
       }
-      if (hudScroll) hudScroll.textContent = `${Math.round(window.scrollY)}px`;
-      if (hudShift) hudShift.textContent = "0.0px";
-      if (hudPyImg) hudPyImg.textContent = "0.0px";
       return;
     }
 
@@ -320,20 +312,7 @@ export function initPortfolioScroll() {
           artWrap.removeAttribute("data-color-active");
         }
       }
-
-      const card = fig.closest(".landing-feature");
-      if (card) {
-        const readout = card.querySelector(".landing-feature-drift-readout");
-        if (readout) {
-          readout.textContent = `py: ${pyImg >= 0 ? "+" : ""}${pyImg.toFixed(1)}px`;
-        }
-      }
     }
-
-    // Update live HUD
-    if (hudScroll) hudScroll.textContent = `${Math.round(smoothScrollY)}px`;
-    if (hudShift) hudShift.textContent = `${sampleShift >= 0 ? "+" : ""}${sampleShift.toFixed(1)}px`;
-    if (hudPyImg) hudPyImg.textContent = `${samplePyImg >= 0 ? "+" : ""}${samplePyImg.toFixed(1)}px`;
 
     // Keep the rAF loop alive while wheel momentum or transform damping is converging
     if (needMore || Math.abs(targetScrollY - smoothScrollY) > 0.15) {

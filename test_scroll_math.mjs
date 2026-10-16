@@ -94,8 +94,17 @@ assert.ok(WHEEL_LAMBDA > 0 && TRANSFORM_LAMBDA > WHEEL_LAMBDA);
 
 // 10. Verify all referenced assets in index.html exist on disk
 const html = fs.readFileSync(path.join(dir, "index.html"), "utf8");
-const assetMatches = [...html.matchAll(/src="\.\/assets\/([^"]+)"/g)].map((m) => m[1]);
-assert.ok(assetMatches.length >= 22, `Expected at least 22 image tags, found ${assetMatches.length}`);
+const assetMatches = [...html.matchAll(/(?:src|href)="\.\/assets\/([^"]+)"/g)].map((m) => m[1]);
+assert.ok(assetMatches.length >= 25, `Expected at least 25 asset tags, found ${assetMatches.length}`);
+assert.ok(assetMatches.includes("favicon-32.png"), "Missing favicon-32.png in index.html");
+assert.ok(assetMatches.includes("dnzlfx-avatar.png"), "Missing dnzlfx-avatar.png in index.html");
+assert.ok(assetMatches.includes("hero-anime-mono.png") && assetMatches.includes("hero-anime-color.png"), "Missing hero anime plate assets in index.html");
+assert.ok(assetMatches.includes("footer-anime-mono.png") && assetMatches.includes("footer-anime-color.png"), "Missing footer mural assets in index.html");
+const featureCards = (html.match(/class="landing-feature"/g) || []).length;
+assert.equal(featureCards, 4, `Expected 4 project cards, found ${featureCards}`);
+for (const banned of ["PROTOTYPE DEMO", "PROTOTYPE NOTICE", "DEMONSTRATION SHOWCASE", "dx-hud", "landing-feature-drift-readout", "nw-mission-index", "nw-art-tag", "dx-eyebrow"]) {
+  assert.ok(!html.includes(banned), `index.html still contains banned template marker: ${banned}`);
+}
 for (const file of assetMatches) {
   const fullPath = path.join(dir, "assets", file);
   assert.ok(fs.existsSync(fullPath), `Missing asset file: ${fullPath}`);
