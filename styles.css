@@ -670,8 +670,9 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
      the full row instead of breaking mid-word. */
   .dx-footer-group:last-child { grid-column: 1 / -1; }
   /* Phones: the sticky topbar wraps to ~3 rows here, so the mural-only band under
-     the copy shrinks to keep the giant name clear of it at the end of the page. */
-  .dx-footer-inner { padding-bottom: clamp(44px, 7vh, 120px); }
+     the copy shrinks to keep the giant name clear of it at the end of the page
+     (measured: the name's line box must stay below the sticky header's bottom). */
+  .dx-footer-inner { padding-bottom: clamp(18px, 3vh, 64px); }
 }
 
 /* Short viewports (wide laptops, small phones): the copy column has to fit the
