@@ -4,11 +4,13 @@ node_modules/
 .env
 .env.*
 
-# Internal QA & temporary capture harnesses / raw dumps
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Internal QA & temporary raw dumps
 qa-verify/
-evidence-qa-t_f44a2c7b/
-capture_evidence.cjs
-capture_header_comparison.cjs
+evidence-qa-*/
 evidence/dnzlfx-portfolio-scroll-demo.mp4
 evidence/header-*
 evidence/*.json
