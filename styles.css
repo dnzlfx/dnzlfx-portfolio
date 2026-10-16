@@ -27,6 +27,7 @@
 
   --maxw: 1180px;
   --gutter: clamp(20px, 5vw, 64px);
+  --frame-inset: clamp(10px, 1.2vw, 16px);
 
   --nw-reveal-delay: 0ms;
 }
@@ -48,6 +49,7 @@ body {
   line-height: 1.65;
   letter-spacing: 0.005em;
   overflow-x: hidden;
+  padding: var(--frame-inset);
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -61,14 +63,14 @@ code {
   color: var(--purple-300);
   background: rgba(168, 85, 247, 0.09);
   border: 1px solid rgba(168, 85, 247, 0.16);
-  border-radius: 4px;
+  border-radius: 0;
   padding: 0.1em 0.34em;
 }
 
 :focus-visible {
   outline: 2px solid var(--purple-500);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .skip-link {
@@ -79,7 +81,7 @@ code {
   background: var(--purple-700);
   color: #fff;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 0;
   transition: top 0.18s ease;
 }
 .skip-link:focus { top: 12px; color: #fff; }
@@ -87,20 +89,18 @@ code {
 /* Ambient viewport frame -------------------------------------------------- */
 .dx-frame {
   position: fixed;
-  inset: 0;
+  inset: var(--frame-inset);
   pointer-events: none;
   z-index: 60;
-  box-shadow: inset 0 0 200px rgba(109, 40, 217, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 0;
 }
 
 /* Header ------------------------------------------------------------------ */
 .dx-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(14px);
-  background: linear-gradient(to bottom, rgba(7, 6, 11, 0.92), rgba(7, 6, 11, 0.62) 70%, rgba(7, 6, 11, 0));
-  border-bottom: 1px solid var(--line-soft);
+  position: static;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line);
 }
 
 .dx-nav {
@@ -113,7 +113,7 @@ code {
 }
 
 .dx-brand { display: inline-flex; align-items: center; gap: 11px; color: var(--ink); flex: 0 0 auto; }
-.dx-brand-avatar { border-radius: 50%; border: 1px solid var(--line); flex: 0 0 auto; }
+.dx-brand-avatar { border-radius: 0; border: 1px solid var(--line); flex: 0 0 auto; }
 .dx-brand-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
 .dx-brand-mark { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
 .dx-brand-name { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); letter-spacing: 0.07em; white-space: nowrap; }
@@ -129,19 +129,6 @@ code {
 .dx-nav-link { color: var(--ink-dim); font-size: 14px; }
 .dx-nav-link:hover { color: var(--purple-300); }
 .dx-nav-link--ext { display: inline-flex; align-items: center; gap: 4px; }
-
-.dx-motion-btn {
-  font: inherit;
-  font-size: 12px;
-  font-family: var(--font-mono);
-  color: var(--ink-dim);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 7px 14px;
-  cursor: pointer;
-}
-.dx-motion-btn:hover { color: var(--purple-300); border-color: var(--purple-700); }
 
 /* Stage ------------------------------------------------------------------- */
 .dx-stage { display: block; }
@@ -205,7 +192,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-btn {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 13px 24px;
   font-size: 15px;
   font-weight: 560;
@@ -260,7 +247,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .nw-mission-hero {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 0;
   min-height: clamp(220px, 34vw, 420px);
 }
 .nw-mission-hero img {
@@ -309,11 +296,11 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   font-size: 11.5px;
   color: var(--ink-dim);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 5px 12px;
 }
 
-.nw-mission-art { position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 840 / 520; }
+.nw-mission-art { position: relative; overflow: hidden; border-radius: 0; aspect-ratio: 840 / 520; }
 .nw-mission-art img {
   position: absolute;
   inset: 0;
@@ -363,11 +350,24 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   flex-direction: column;
   background: linear-gradient(180deg, var(--bg-panel), var(--bg-soft));
   border: 1px solid var(--line-soft);
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 .landing-feature:hover { border-color: var(--purple-900); transform: translateY(-2px); }
+
+/* Intentional three-project layout: one full-width featured card, two below --- */
+.landing-feature-grid > .landing-feature--featured { grid-column: 1 / -1; }
+.landing-feature--featured { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+.landing-feature--featured .landing-feature-top {
+  flex: 1 1 56%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.landing-feature--featured .landing-feature-art { flex: 1 1 42%; min-width: 0; margin-top: 0; }
+.landing-feature--featured .landing-feature-footer { flex: 1 0 100%; }
 
 .landing-feature-top { padding: clamp(20px, 2.4vw, 30px); }
 .landing-feature-lang {
@@ -427,7 +427,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-card-panel {
   background: var(--bg-soft);
   border: 1px solid var(--line-soft);
-  border-radius: 16px;
+  border-radius: 0;
   padding: clamp(24px, 3vw, 40px);
 }
 .dx-card-panel h2 { margin: 0 0 18px; font-size: clamp(24px, 3vw, 34px); font-weight: 630; }
@@ -452,7 +452,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   color: var(--ink);
   background: rgba(168, 85, 247, 0.08);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 6px 12px;
 }
 
@@ -538,9 +538,19 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 @media (max-width: 720px) {
   .dx-nav { flex-wrap: wrap; gap: 12px; }
   .dx-nav-links { order: 3; width: 100%; margin: 0; gap: 18px; overflow-x: auto; }
-  .dx-motion-btn { margin-left: auto; }
   .landing-feature-grid { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked featured card: column + nowrap. A wrapping column flex would spill
+     the footer into a second column outside the card. */
+  .landing-feature--featured { flex-direction: column; flex-wrap: nowrap; }
+  .landing-feature--featured .landing-feature-top { flex: 0 0 auto; }
+  .landing-feature--featured .landing-feature-art { flex: 0 0 auto; margin-top: auto; }
+  .landing-feature--featured .landing-feature-footer { flex: 0 0 auto; }
   .dx-footer-inner { justify-content: flex-start; }
+}
+
+@media (max-width: 480px) {
+  /* Very small screens: links wrap onto a second row instead of scrolling sideways */
+  .dx-nav-links { flex-wrap: wrap; overflow-x: visible; row-gap: 8px; }
 }
 
 /* ==========================================================================
