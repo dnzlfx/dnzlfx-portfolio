@@ -1,0 +1,473 @@
+diff --git a/README.md b/README.md
+index fddca0c..c6b35d5 100644
+--- a/README.md
++++ b/README.md
+@@ -13,8 +13,8 @@ no build step, no runtime dependencies.
+   that fades into the page background.
+ - **How I build** — three editorial rows on local-first autonomy, citation-verified
+   retrieval, and the balance between architecture and interface.
+-- **Projects** — a 2×2 grid of the four projects I want people to look at:
+-  Vyn & Samantha, AppealForge, FoxTube and Physicsmon.
++- **Projects** — one featured card plus two companions, the three projects I want
++  people to look at: Vyn & Samantha, AppealForge and FoxTube.
+ - **About** — bio, languages and frameworks.
+ - **Contact** — email, GitHub, education.
+ 
+diff --git a/assets/feature-physicsmon-color.png b/assets/feature-physicsmon-color.png
+deleted file mode 100644
+index 0b0cb3e..0000000
+Binary files a/assets/feature-physicsmon-color.png and /dev/null differ
+diff --git a/assets/feature-physicsmon-mono.png b/assets/feature-physicsmon-mono.png
+deleted file mode 100644
+index 6eeacb3..0000000
+Binary files a/assets/feature-physicsmon-mono.png and /dev/null differ
+diff --git a/evidence/a-successor/evidence-report.json b/evidence/a-successor/evidence-report.json
+new file mode 100644
+index 0000000..d389be4
+--- /dev/null
++++ b/evidence/a-successor/evidence-report.json
+@@ -0,0 +1,111 @@
++{
++  "task": "t_a488942f",
++  "tenant": "portfolio-redesign",
++  "assignee": "diseno-ui",
++  "supersedes": "t_f5471902 (BLOCKED / SUPERSEDIDA, no reactivada)",
++  "authorization": "t_e1996ef8 comentario 03:41 (plan de propiedad A)",
++  "export_original": "evidence/a-successor/original-export.json",
++  "baseline": {
++    "main_sha": "72b6624fabaeb5f3fdee5646a38d97990f072c67",
++    "backup_ref": "backup/a-redesign-structure-72b6624",
++    "backup_tar_gz": "evidence/a-successor/backup/baseline-72b6624.tar.gz",
++    "backup_tar_gz_sha256": "5c08bf8001ab7fb721aafe4bbb737da5ddbf21b213353f73871f7962fe052428",
++    "pre_sha256_txt": "evidence/a-successor/backup/pre-sha256.txt",
++    "rollback": "revert aditivo sobre el worktree / rama; el baseline queda intacto en main y en el ref de backup"
++  },
++  "branch": "redesign/structure",
++  "worktree": ".worktrees/redesign-structure",
++  "files_changed": [
++    "index.html",
++    "styles.css",
++    "README.md",
++    "generate_assets.py",
++    "assets/feature-physicsmon-color.png (borrado)",
++    "assets/feature-physicsmon-mono.png (borrado)"
++  ],
++  "files_explicitly_untouched": {
++    "app.js": "HEAD sha256 4ca8d645091bc78c4fdd2ea07ed9c9dff512314d61f2471d9d61de0d500a49c0 (idéntico al baseline; git diff --name-only no lo lista)",
++    "test_scroll_math.mjs": "HEAD sha256 37497de22f960063df695f8375e5d810f0260091ecb982ffa464649094e3d932 (idéntico al baseline)",
++    "footer_block_index_html": "sha256 d1f3d5bf9e9d4576c4a5ad807556fa0f93df949463b775fd17079b7cfd54bd1d == baseline (999 bytes, sin cambios)",
++    "C_footer_head": "45a4ba9251a45eb16e1b86805afd469ce8beb5d9 (rama portfolio/footer-motion, no tocada)"
++  },
++  "sha256_pre_post": {
++    "index.html": {"pre": "40e38444bfc852d5f9b9fbe728a5a5b118304f81fd45fcbb18ac376d4fc13c99", "post": "56a8e2369b33ca39f26a5252e0dafebea50c34b55a6043607854f94d7ae109d7"},
++    "styles.css": {"pre": "b645f34aafc4a1f3442d7da2cf6722820fc76cd56486ab1d73099c4ff11e8f5f", "post": "6c20fde933f14f6f7ac5f25e5a365a56496be9fe4f9a37e6568c3c75e6fea6c4"},
++    "README.md": {"pre": "4a3f9c9db3685665a3accd8fb1b2ad6c53551b027a4c4be37036137bab966353", "post": "ac29b06081a6e0c7e2db034359fb39bd4c324958dc4f9fce6eeb79a0884b2941"},
++    "generate_assets.py": {"pre": "625261d33e2f7ebff1146cb93b79326dd63dbce78e12eb0b511eef50e62049af", "post": "d1162245db58dda05c1615e5280df5c93f7839b70d06ef69cee199736b49079c"}
++  },
++  "requirements_evidence": {
++    "marco_cuadrado": {
++      "selector": ".dx-frame",
++      "position": "fixed",
++      "border": "1px solid rgba(168, 85, 247, 0.22)",
++      "border_radius": "0px",
++      "inset_medido": {"1440x900": [16, 16, 16, 16], "390x844": [10, 10, 10, 10], "320x568": [10, 10, 10, 10]},
++      "gutters": "body { padding: var(--frame-inset) } sobre --bg oscuro; la banda del header usa --bg-soft alineada al contenedor interior",
++      "verificado_en_captura": "a-desktop-01-hero.png (esquina 90° sin radio, línea violeta 1px, sin redondeo)"
++    },
++    "nav_estatica_no_flotante": {
++      "header_position": "static",
++      "backdrop_filter": "none",
++      "box_shadow": "none",
++      "background": "rgb(12, 10, 20) (--bg-soft, opaca)",
++      "border_radius": "0px",
++      "sin_sticky_fixed_blur_glass": true,
++      "motion_toggle_html": "eliminado (grep motion-toggle|motion-label en index.html => 0); app.js es null-safe (if (motionBtn)) y no requiere el botón"
++    },
++    "contenedores_cuadrados": {
++      "cards_landing_feature": [
++        {"clase": "landing-feature--featured", "radius": "0px", "w": 330, "h": 684},
++        {"clase": "landing-feature", "radius": "0px", "w": 330, "h": 760},
++        {"clase": "landing-feature", "radius": "0px", "w": 330, "h": 633}
++      ],
++      "chips_paneles_botones": "border-radius 0 en code, .dx-btn, .nw-mission-hero, .nw-mission-art, .dx-card-panel, .dx-chip, .skip-link, .dx-brand-avatar, :focus-visible"
++    },
++    "tres_proyectos": {
++      "cards": ["Vyn & Samantha (featured, juntos)", "AppealForge", "FoxTube"],
++      "physicsmon": "card HTML eliminada, assets/feature-physicsmon-{mono,color}.png borrados con git rm, rama/llamada del generador eliminada; grep -rni physicsmon en el árbol => 0",
++      "appealforge_url": "https://github.com/dnzlfx/Impact_Forge-AppealForge (corregida desde /AppealForge 404)",
++      "sin_repos_externos": true
++    },
++    "contenido_real_preservado": {
++      "mailto": "guzmanramirezchristian@outlook.com (bloque footer, sin cambios)",
++      "github_perfil": "https://github.com/dnzlfx",
++      "repos": ["https://github.com/dnzlfx/Vyn", "https://github.com/dnzlfx/Samantha", "https://github.com/dnzlfx/Impact_Forge-AppealForge", "https://github.com/dnzlfx/FoxTube"],
++      "assets_referenciados": 21,
++      "assets_faltantes": [],
++      "avatar_favicon": "./assets/dnzlfx-avatar.png, ./assets/favicon.png, ./assets/favicon-32.png",
++      "idioma": "inglés"
++    },
++    "responsive_sin_overflow": {
++      "390x844": {"docW": 390, "innerW": 390, "elementos_desbordados": []},
++      "320x568": {"docW": 320, "innerW": 320, "elementos_desbordados": []},
++      "1440x900": {"elementos_desbordados": []},
++      "fix_aplicado": "<=720px: .landing-feature--featured { flex-direction: column; flex-wrap: nowrap } + flex: 0 0 auto (evita que el footer de la tarjeta salte a una segunda columna fuera de la tarjeta); <=480px: .dx-nav-links { flex-wrap: wrap }"
++    },
++    "imagenes_y_reveals": {
++      "imagenes_rotas": 0,
++      "imagenes_sin_src": 0,
++      "reveals_disparados": "data-pending 10 -> 6/7 durante el scroll real (IntersectionObserver de app.js funcionando con el toggle ausente)"
++    }
++  },
++  "screenshots": {
++    "metodo": "Chromium headless real (CDP Page.captureScreenshot, viewport) sobre http://127.0.0.1:8137 (worktree). El motor de scroll de app.js revierte el scroll programático, por lo que se neutralizó window.scrollTo solo en runtime (ningún cambio en el repo) y se fijó document.scrollingElement.scrollTop; cada captura registra la posición real de scroll.",
++    "desktop_1440x900": ["a-desktop-01-hero.png y=0", "a-desktop-02-top.png y=55", "a-desktop-03-architecture.png y=897", "a-desktop-04-projects.png y=2829", "a-desktop-05-about.png y=4319", "a-desktop-06-footer.png y=4801"],
++    "mobile_390x844": ["a-mobile-01-hero.png y=0", "a-mobile-02-top.png y=125", "a-mobile-03-architecture.png y=1338", "a-mobile-04-projects.png y=3757", "a-mobile-05-about.png y=6122", "a-mobile-06-footer.png y=7225"],
++    "tiny_320x568": ["a-tiny-01-hero.png y=0", "a-tiny-02-top.png y=125", "a-tiny-03-architecture.png y=1376", "a-tiny-04-projects.png y=4114", "a-tiny-05-about.png y=6636", "a-tiny-06-footer.png y=8368"]
++  },
++  "tests_run": [
++    "python3 -c 'ast.parse(generate_assets.py)' => OK (sin errores de sintaxis)",
++    "smoke del generador con OUT_DIR temporal => no produce ningún asset physicsmon",
++    "node test_scroll_math.mjs (sin modificar, apunta a main) => exit 0",
++    "grep -rni physicsmon en el worktree (excl. evidence/.git) => 0 coincidencias",
++    "python3 verify: 21 refs de assets, 0 faltantes, physicsmon_in_html=false",
++    "hash de región <footer> igual al baseline (bloque C intacto)"
++  ],
++  "ci_contract": {
++    "completion_contract": "dnzlfx/dnzlfx-portfolio",
++    "repo_has_workflows": false,
++    "note": "El repositorio no tiene .github/workflows, por lo que no existen checks requeridos que puedan pasar; gate contractual no satisfacible (ver kanban-pr-contract)."
++  }
++}
+diff --git a/generate_assets.py b/generate_assets.py
+index 2126094..12a5ef7 100644
+--- a/generate_assets.py
++++ b/generate_assets.py
+@@ -717,20 +717,6 @@ def make_feature_card_art(index: int, name: str):
+             d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=125 + (220 - r) // 2, width=3)
+         d.polygon([(cx - 55, cy - 75), (cx - 55, cy + 75), (cx + 85, cy)], fill=235, outline=40)
+         d.polygon([(cx - 35, cy - 45), (cx - 35, cy + 45), (cx + 50, cy)], fill=90)
+-    else:
+-        # Physicsmon: interactive 2D browser physics arena
+-        for arc_i in range(6):
+-            pts = []
+-            for step in range(40):
+-                t = step / 39.0
+-                px = 60 + t * (w - 120)
+-                py = h - 70 - (4 * t * (1 - t)) * (160 + arc_i * 38)
+-                pts.append((px, py))
+-            d.line(pts, fill=140 + arc_i * 20, width=3)
+-        engraving_sphere(d, 190, 220, 62, light=(-0.5, -0.6, 0.6))
+-        engraving_sphere(d, 450, 190, 52, light=(0.5, -0.6, 0.6))
+-        starburst(d, cx, 165, 10, 95, 16, 250, width=3)
+-
+     img = img.filter(ImageFilter.GaussianBlur(radius=0.5))
+     save_plate(img, f"feature-{name}")
+ 
+@@ -742,6 +728,6 @@ if __name__ == "__main__":
+     make_editorial_duo(1, "mission-duo-1")
+     make_editorial_duo(2, "mission-duo-2")
+     make_editorial_duo(3, "mission-duo-3")
+-    for idx, slug in [(1, "vyn"), (3, "appealforge"), (4, "foxtube"), (6, "physicsmon")]:
++    for idx, slug in [(1, "vyn"), (3, "appealforge"), (4, "foxtube")]:
+         make_feature_card_art(idx, slug)
+     print("Generated all assets in", OUT_DIR)
+diff --git a/index.html b/index.html
+index d001852..f6eae12 100644
+--- a/index.html
++++ b/index.html
+@@ -48,10 +48,6 @@
+           </a>
+         </li>
+       </ul>
+-
+-      <button type="button" class="dx-motion-btn" id="motion-toggle" aria-pressed="false" title="Toggle parallax and scroll animations">
+-        <span id="motion-label">Motion: Fluid</span>
+-      </button>
+     </nav>
+   </header>
+ 
+@@ -261,7 +257,7 @@
+     </section>
+ 
+     <!-- ====================================================================
+-         3. PROJECTS — 2×2 grid of four large cards
++         3. PROJECTS — one featured card plus two companions (three projects)
+          ==================================================================== -->
+     <section id="projects" class="hw-feature-parallax" aria-labelledby="projects-heading">
+       <div class="hw-feature-panel">
+@@ -270,14 +266,14 @@
+             <h2 id="projects-heading" class="dx-section-title">Projects</h2>
+           </div>
+           <p class="dx-section-sub">
+-            Four things I have built and shipped. Each card links to the public
++            Three things I have built and shipped. Each card links to the public
+             repository under <strong>github.com/dnzlfx</strong>.
+           </p>
+         </div>
+ 
+         <div class="landing-feature-grid">
+-          <!-- Card 1: Vyn & Samantha -->
+-          <article class="landing-feature">
++          <!-- Card 1: Vyn & Samantha (featured) -->
++          <article class="landing-feature landing-feature--featured">
+             <div class="landing-feature-top">
+               <span class="landing-feature-lang">Python · TypeScript · Local LLMs · Django-style web dashboard</span>
+               <h3 class="landing-feature-title">Vyn &amp; Samantha</h3>
+@@ -360,7 +356,7 @@
+             </div>
+ 
+             <div class="landing-feature-footer">
+-              <a class="landing-feature-link" href="https://github.com/dnzlfx/AppealForge" target="_blank" rel="noopener noreferrer">AppealForge ↗</a>
++              <a class="landing-feature-link" href="https://github.com/dnzlfx/Impact_Forge-AppealForge" target="_blank" rel="noopener noreferrer">AppealForge ↗</a>
+             </div>
+           </article>
+ 
+@@ -406,46 +402,6 @@
+             </div>
+           </article>
+ 
+-          <!-- Card 4: Physicsmon -->
+-          <article class="landing-feature">
+-            <div class="landing-feature-top">
+-              <span class="landing-feature-lang">JavaScript · HTML5 Canvas · Real-time physics</span>
+-              <h3 class="landing-feature-title">Physicsmon</h3>
+-              <p class="landing-feature-desc">
+-                A 2D browser game that combines creature battles with real projectile
+-                physics and collisions, written in plain JavaScript on HTML5 Canvas —
+-                the project where I get to be as creative as I am analytical.
+-              </p>
+-            </div>
+-
+-            <div class="landing-feature-art">
+-              <figure>
+-                <div class="hw-noise">
+-                  <img
+-                    class="hw-parallax"
+-                    src="./assets/feature-physicsmon-mono.png"
+-                    alt="Dithered illustration of parabolic projectile trajectories and colliding spheres"
+-                    width="640"
+-                    height="480"
+-                    loading="lazy"
+-                  />
+-                  <img
+-                    class="hw-parallax nw-mission-color"
+-                    src="./assets/feature-physicsmon-color.png"
+-                    alt=""
+-                    aria-hidden="true"
+-                    width="640"
+-                    height="480"
+-                    loading="lazy"
+-                  />
+-                </div>
+-              </figure>
+-            </div>
+-
+-            <div class="landing-feature-footer">
+-              <a class="landing-feature-link" href="https://github.com/dnzlfx/Physicsmon-" target="_blank" rel="noopener noreferrer">Physicsmon ↗</a>
+-            </div>
+-          </article>
+         </div>
+       </div>
+     </section>
+diff --git a/styles.css b/styles.css
+index 523be55..5ffd618 100644
+--- a/styles.css
++++ b/styles.css
+@@ -27,6 +27,7 @@
+ 
+   --maxw: 1180px;
+   --gutter: clamp(20px, 5vw, 64px);
++  --frame-inset: clamp(10px, 1.2vw, 16px);
+ 
+   --nw-reveal-delay: 0ms;
+ }
+@@ -48,6 +49,7 @@ body {
+   line-height: 1.65;
+   letter-spacing: 0.005em;
+   overflow-x: hidden;
++  padding: var(--frame-inset);
+ }
+ 
+ img { max-width: 100%; height: auto; display: block; }
+@@ -61,14 +63,14 @@ code {
+   color: var(--purple-300);
+   background: rgba(168, 85, 247, 0.09);
+   border: 1px solid rgba(168, 85, 247, 0.16);
+-  border-radius: 4px;
++  border-radius: 0;
+   padding: 0.1em 0.34em;
+ }
+ 
+ :focus-visible {
+   outline: 2px solid var(--purple-500);
+   outline-offset: 3px;
+-  border-radius: 3px;
++  border-radius: 0;
+ }
+ 
+ .skip-link {
+@@ -79,7 +81,7 @@ code {
+   background: var(--purple-700);
+   color: #fff;
+   padding: 10px 16px;
+-  border-radius: 8px;
++  border-radius: 0;
+   transition: top 0.18s ease;
+ }
+ .skip-link:focus { top: 12px; color: #fff; }
+@@ -87,20 +89,18 @@ code {
+ /* Ambient viewport frame -------------------------------------------------- */
+ .dx-frame {
+   position: fixed;
+-  inset: 0;
++  inset: var(--frame-inset);
+   pointer-events: none;
+   z-index: 60;
+-  box-shadow: inset 0 0 200px rgba(109, 40, 217, 0.14);
++  border: 1px solid rgba(168, 85, 247, 0.22);
++  border-radius: 0;
+ }
+ 
+ /* Header ------------------------------------------------------------------ */
+ .dx-header {
+-  position: sticky;
+-  top: 0;
+-  z-index: 50;
+-  backdrop-filter: blur(14px);
+-  background: linear-gradient(to bottom, rgba(7, 6, 11, 0.92), rgba(7, 6, 11, 0.62) 70%, rgba(7, 6, 11, 0));
+-  border-bottom: 1px solid var(--line-soft);
++  position: static;
++  background: var(--bg-soft);
++  border-bottom: 1px solid var(--line);
+ }
+ 
+ .dx-nav {
+@@ -113,7 +113,7 @@ code {
+ }
+ 
+ .dx-brand { display: inline-flex; align-items: center; gap: 11px; color: var(--ink); flex: 0 0 auto; }
+-.dx-brand-avatar { border-radius: 50%; border: 1px solid var(--line); flex: 0 0 auto; }
++.dx-brand-avatar { border-radius: 0; border: 1px solid var(--line); flex: 0 0 auto; }
+ .dx-brand-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
+ .dx-brand-mark { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
+ .dx-brand-name { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); letter-spacing: 0.07em; white-space: nowrap; }
+@@ -130,19 +130,6 @@ code {
+ .dx-nav-link:hover { color: var(--purple-300); }
+ .dx-nav-link--ext { display: inline-flex; align-items: center; gap: 4px; }
+ 
+-.dx-motion-btn {
+-  font: inherit;
+-  font-size: 12px;
+-  font-family: var(--font-mono);
+-  color: var(--ink-dim);
+-  background: transparent;
+-  border: 1px solid var(--line);
+-  border-radius: 999px;
+-  padding: 7px 14px;
+-  cursor: pointer;
+-}
+-.dx-motion-btn:hover { color: var(--purple-300); border-color: var(--purple-700); }
+-
+ /* Stage ------------------------------------------------------------------- */
+ .dx-stage { display: block; }
+ 
+@@ -205,7 +192,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+ .dx-btn {
+   display: inline-flex;
+   align-items: center;
+-  border-radius: 999px;
++  border-radius: 0;
+   padding: 13px 24px;
+   font-size: 15px;
+   font-weight: 560;
+@@ -260,7 +247,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+ .nw-mission-hero {
+   position: relative;
+   overflow: hidden;
+-  border-radius: 14px;
++  border-radius: 0;
+   min-height: clamp(220px, 34vw, 420px);
+ }
+ .nw-mission-hero img {
+@@ -309,11 +296,11 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+   font-size: 11.5px;
+   color: var(--ink-dim);
+   border: 1px solid var(--line);
+-  border-radius: 999px;
++  border-radius: 0;
+   padding: 5px 12px;
+ }
+ 
+-.nw-mission-art { position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 840 / 520; }
++.nw-mission-art { position: relative; overflow: hidden; border-radius: 0; aspect-ratio: 840 / 520; }
+ .nw-mission-art img {
+   position: absolute;
+   inset: 0;
+@@ -363,12 +350,25 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+   flex-direction: column;
+   background: linear-gradient(180deg, var(--bg-panel), var(--bg-soft));
+   border: 1px solid var(--line-soft);
+-  border-radius: 16px;
++  border-radius: 0;
+   overflow: hidden;
+   transition: border-color 0.25s ease, transform 0.25s ease;
+ }
+ .landing-feature:hover { border-color: var(--purple-900); transform: translateY(-2px); }
+ 
++/* Intentional three-project layout: one full-width featured card, two below --- */
++.landing-feature-grid > .landing-feature--featured { grid-column: 1 / -1; }
++.landing-feature--featured { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
++.landing-feature--featured .landing-feature-top {
++  flex: 1 1 56%;
++  min-width: 0;
++  display: flex;
++  flex-direction: column;
++  justify-content: center;
++}
++.landing-feature--featured .landing-feature-art { flex: 1 1 42%; min-width: 0; margin-top: 0; }
++.landing-feature--featured .landing-feature-footer { flex: 1 0 100%; }
++
+ .landing-feature-top { padding: clamp(20px, 2.4vw, 30px); }
+ .landing-feature-lang {
+   display: block;
+@@ -427,7 +427,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+ .dx-card-panel {
+   background: var(--bg-soft);
+   border: 1px solid var(--line-soft);
+-  border-radius: 16px;
++  border-radius: 0;
+   padding: clamp(24px, 3vw, 40px);
+ }
+ .dx-card-panel h2 { margin: 0 0 18px; font-size: clamp(24px, 3vw, 34px); font-weight: 630; }
+@@ -452,7 +452,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+   color: var(--ink);
+   background: rgba(168, 85, 247, 0.08);
+   border: 1px solid var(--line);
+-  border-radius: 8px;
++  border-radius: 0;
+   padding: 6px 12px;
+ }
+ 
+@@ -538,11 +538,21 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+ @media (max-width: 720px) {
+   .dx-nav { flex-wrap: wrap; gap: 12px; }
+   .dx-nav-links { order: 3; width: 100%; margin: 0; gap: 18px; overflow-x: auto; }
+-  .dx-motion-btn { margin-left: auto; }
+   .landing-feature-grid { grid-template-columns: minmax(0, 1fr); }
++  /* Stacked featured card: column + nowrap. A wrapping column flex would spill
++     the footer into a second column outside the card. */
++  .landing-feature--featured { flex-direction: column; flex-wrap: nowrap; }
++  .landing-feature--featured .landing-feature-top { flex: 0 0 auto; }
++  .landing-feature--featured .landing-feature-art { flex: 0 0 auto; margin-top: auto; }
++  .landing-feature--featured .landing-feature-footer { flex: 0 0 auto; }
+   .dx-footer-inner { justify-content: flex-start; }
+ }
+ 
++@media (max-width: 480px) {
++  /* Very small screens: links wrap onto a second row instead of scrolling sideways */
++  .dx-nav-links { flex-wrap: wrap; overflow-x: visible; row-gap: 8px; }
++}
++
+ /* ==========================================================================
+    Motion preferences
+    ========================================================================== */
