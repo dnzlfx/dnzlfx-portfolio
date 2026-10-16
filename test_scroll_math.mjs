@@ -165,6 +165,11 @@ assert.deepEqual(missingRepos, [], `Project cards are missing repo links: ${miss
 assert.deepEqual(extraRepos, [], `Project cards link unexpected repos: ${extraRepos.join(", ")}`);
 
 // 11c. No template/debug chrome may survive in the shipped markup.
+assert.ok(assetMatches.length >= 25, `Expected at least 25 asset tags, found ${assetMatches.length}`);
+assert.ok(assetMatches.includes("favicon-32.png"), "Missing favicon-32.png in index.html");
+assert.ok(assetMatches.includes("dnzlfx-avatar.png"), "Missing dnzlfx-avatar.png in index.html");
+assert.ok(assetMatches.includes("hero-abstract-mono.png") && assetMatches.includes("hero-abstract-color.png"), "Missing hero abstract plate assets in index.html");
+assert.ok(assetMatches.includes("footer-sky-mono.png") && assetMatches.includes("footer-sky-color.png"), "Missing footer mural sky layers in index.html");
 for (const banned of ["PROTOTYPE DEMO", "PROTOTYPE NOTICE", "DEMONSTRATION SHOWCASE", "dx-hud", "landing-feature-drift-readout", "nw-mission-index", "nw-art-tag", "dx-eyebrow"]) {
   assert.ok(!html.includes(banned), `index.html still contains banned template marker: ${banned}`);
 }
@@ -177,8 +182,8 @@ assert.equal(assetMatches.length, 27, `Expected exactly 27 asset references, fou
 const requiredAssets = [
   "favicon-32.png",
   "dnzlfx-avatar.png",
-  "hero-anime-mono.png",
-  "hero-anime-color.png",
+  "hero-abstract-mono.png",
+  "hero-abstract-color.png",
   "footer-sky-mono.png",
   "footer-sky-color.png",
   "footer-spires-mono.png",
@@ -201,7 +206,7 @@ for (const file of requiredAssets) {
   assert.ok(stat.size > 1000, `Asset file suspiciously small: ${fullPath} (${stat.size} bytes)`);
 }
 // The assets the markup actually references must be among what index.html links.
-for (const file of ["favicon-32.png", "dnzlfx-avatar.png", "hero-anime-mono.png", "hero-anime-color.png", "footer-sky-mono.png", "footer-sky-color.png"]) {
+for (const file of ["favicon-32.png", "dnzlfx-avatar.png", "hero-abstract-mono.png", "hero-abstract-color.png", "footer-sky-mono.png", "footer-sky-color.png"]) {
   assert.ok(assetMatches.includes(file), `index.html does not reference expected asset: ${file}`);
 }
 // Every referenced asset must exist on disk and be > 1000 bytes.
