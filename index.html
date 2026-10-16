@@ -48,10 +48,6 @@
           </a>
         </li>
       </ul>
-
-      <button type="button" class="dx-motion-btn" id="motion-toggle" aria-pressed="false" title="Toggle parallax and scroll animations">
-        <span id="motion-label">Motion: Fluid</span>
-      </button>
     </nav>
   </header>
 
@@ -522,40 +518,90 @@
     </section>
   </main>
 
-  <footer class="dx-footer">
+  <footer class="dx-footer" id="footer" aria-labelledby="footer-heading">
     <div class="dx-footer-mural" aria-hidden="true">
-      <img
-        class="nw-mission-image nw-color-reveal"
-        src="./assets/footer-anime-mono.png"
-        alt=""
-        width="1440"
-        height="960"
-        loading="lazy"
-      />
-      <img
-        class="nw-mission-image nw-mission-color nw-color-reveal"
-        src="./assets/footer-anime-color.png"
-        alt=""
-        width="1440"
-        height="960"
-        loading="lazy"
-      />
+      <div class="dx-footer-layer dx-footer-layer--sky" data-drift="30">
+        <img src="./assets/footer-sky-mono.png" alt="" width="1500" height="1000" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-layer dx-footer-layer--sky dx-footer-layer--color" data-drift="30">
+        <img src="./assets/footer-sky-color.png" alt="" width="1500" height="1000" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-layer dx-footer-layer--spires" data-drift="54">
+        <img src="./assets/footer-spires-mono.png" alt="" width="1500" height="560" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-layer dx-footer-layer--spires dx-footer-layer--color" data-drift="54">
+        <img src="./assets/footer-spires-color.png" alt="" width="1500" height="560" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-layer dx-footer-layer--ridge" data-drift="14">
+        <img src="./assets/footer-ridge-mono.png" alt="" width="1500" height="700" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-layer dx-footer-layer--ridge dx-footer-layer--color" data-drift="14">
+        <img src="./assets/footer-ridge-color.png" alt="" width="1500" height="700" loading="lazy" decoding="async" />
+      </div>
+      <div class="dx-footer-portal"></div>
+      <div class="dx-footer-scrim"></div>
     </div>
 
     <div class="dx-footer-inner">
-      <span class="dx-footer-brand">
-        <img
-          class="dx-footer-avatar"
-          src="./assets/dnzlfx-avatar.png"
-          alt=""
-          aria-hidden="true"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span>© 2026 Christian Denzel Guzmán Ramírez · dnzlfx</span>
-      </span>
-      <span class="dx-footer-meta">San Luis Potosí, MX · Built with native HTML, CSS and JavaScript</span>
+      <p class="dx-footer-kicker" data-fr-at="0.03" data-fr-span="0.14">Open to software engineering internships</p>
+
+      <h2 class="dx-footer-name" id="footer-heading">
+        <span class="dx-footer-name-line" data-fr-at="0.06" data-fr-span="0.2">Christian</span>
+        <span class="dx-footer-name-line" data-fr-at="0.15" data-fr-span="0.22">Denzel</span>
+      </h2>
+
+      <nav class="dx-footer-nav" aria-label="Footer navigation">
+        <div class="dx-footer-group" data-fr-at="0.24" data-fr-span="0.18">
+          <h3 class="dx-footer-group-title" id="footer-nav-sections">Sections</h3>
+          <ul class="dx-footer-list" aria-labelledby="footer-nav-sections">
+            <li><a href="#top">Home</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="dx-footer-group" data-fr-at="0.31" data-fr-span="0.18">
+          <h3 class="dx-footer-group-title" id="footer-nav-projects">Projects</h3>
+          <ul class="dx-footer-list" aria-labelledby="footer-nav-projects">
+            <li><a href="https://github.com/dnzlfx/Vyn" target="_blank" rel="noopener noreferrer">Vyn ↗</a></li>
+            <li><a href="https://github.com/dnzlfx/Samantha" target="_blank" rel="noopener noreferrer">Samantha ↗</a></li>
+            <li><a href="https://github.com/dnzlfx/AppealForge" target="_blank" rel="noopener noreferrer">AppealForge ↗</a></li>
+            <li><a href="https://github.com/dnzlfx/FoxTube" target="_blank" rel="noopener noreferrer">FoxTube ↗</a></li>
+            <li><a href="https://github.com/dnzlfx/Physicsmon-" target="_blank" rel="noopener noreferrer">Physicsmon ↗</a></li>
+          </ul>
+        </div>
+
+        <div class="dx-footer-group" data-fr-at="0.38" data-fr-span="0.18">
+          <h3 class="dx-footer-group-title" id="footer-nav-elsewhere">Elsewhere</h3>
+          <ul class="dx-footer-list" aria-labelledby="footer-nav-elsewhere">
+            <li>
+              <a href="https://github.com/dnzlfx" target="_blank" rel="noopener noreferrer">github.com/dnzlfx ↗</a>
+            </li>
+            <li>
+              <a href="mailto:guzmanramirezchristian@outlook.com">guzmanramirezchristian@outlook.com</a>
+            </li>
+            <li><a class="dx-footer-top-link" href="#top">Back to top ↑</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="dx-footer-signoff" data-fr-at="0.46" data-fr-span="0.22">
+        <span class="dx-footer-brand">
+          <img
+            class="dx-footer-avatar"
+            src="./assets/dnzlfx-avatar.png"
+            alt=""
+            aria-hidden="true"
+            width="26"
+            height="26"
+            loading="lazy"
+          />
+          <span>© 2026 Christian Denzel Guzmán Ramírez · dnzlfx</span>
+        </span>
+        <span class="dx-footer-meta">San Luis Potosí, MX · Built with native HTML, CSS and JavaScript</span>
+      </div>
     </div>
   </footer>
 

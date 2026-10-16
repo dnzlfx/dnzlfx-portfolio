@@ -130,18 +130,6 @@ code {
 .dx-nav-link:hover { color: var(--purple-300); }
 .dx-nav-link--ext { display: inline-flex; align-items: center; gap: 4px; }
 
-.dx-motion-btn {
-  font: inherit;
-  font-size: 12px;
-  font-family: var(--font-mono);
-  color: var(--ink-dim);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 7px 14px;
-  cursor: pointer;
-}
-.dx-motion-btn:hover { color: var(--purple-300); border-color: var(--purple-700); }
 
 /* Stage ------------------------------------------------------------------- */
 .dx-stage { display: block; }
@@ -479,47 +467,226 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-contact-plain { color: var(--ink-dim); font-size: 15px; }
 
 /* ==========================================================================
-   FOOTER — panoramic mural
+   FOOTER — immersive layered mural + progressive reveal
+   The mural is not a rectangular picture: every layer is RGBA art whose alpha
+   channel carries the glow, so the scene melts into the page background and the
+   site's own black/purple language instead of ending on a cropped rectangle.
    ========================================================================== */
 .dx-footer {
   position: relative;
-  margin-top: clamp(40px, 6vw, 90px);
-  border-top: 1px solid var(--line-soft);
+  isolation: isolate;
+  margin-top: clamp(48px, 7vw, 110px);
+  min-height: max(132vh, 780px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
+  background:
+    radial-gradient(130% 78% at 50% 106%, rgba(109, 40, 217, 0.26), rgba(7, 6, 11, 0) 64%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 46%, #0a0716 100%);
 }
+/* Section edge: hidden behind the mural the page keeps flowing; a full-width
+   rule would cap the art and make it read as a panel dropped into the page. */
+.dx-footer::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 1;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0) 0%,
+    rgba(167, 139, 250, 0.3) 50%,
+    rgba(167, 139, 250, 0) 100%
+  );
+}
+
 .dx-footer-mural {
-  position: relative;
-  height: clamp(200px, 30vw, 380px);
-  overflow: hidden;
-}
-.dx-footer-mural img {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
+  z-index: 0;
+  pointer-events: none;
 }
-.dx-footer-mural .nw-mission-color { opacity: 1; }
+.dx-footer-layer { position: absolute; inset: 0; }
+.dx-footer-layer img {
+  position: absolute;
+  left: -6%;
+  width: 112%;
+  max-width: none;
+  height: auto;
+  transform: translate3d(0, var(--dx-footer-drift, 0px), 0);
+}
+.dx-footer-layer--sky img { top: -4%; }
+.dx-footer-layer--spires img { bottom: 26%; }
+.dx-footer-layer--ridge img { bottom: -1%; }
+
+/* Duotone cross-fade: the purple variant lights up as the footer is entered. */
+.dx-footer-layer--color { opacity: var(--dx-footer-color-k, 0); }
+
+.dx-footer-portal {
+  position: absolute;
+  left: 50%;
+  bottom: -24%;
+  width: min(118vh, 1180px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(167, 139, 250, 0.14) 0 1.5px,
+    rgba(0, 0, 0, 0) 1.5px 5.6%
+  );
+  mask-image: radial-gradient(circle at 50% 50%, #000 26%, rgba(0, 0, 0, 0) 74%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 26%, rgba(0, 0, 0, 0) 74%);
+  transform: translateX(-50%) scale(calc(0.86 + 0.16 * var(--dx-footer-progress, 0)));
+  opacity: calc(0.22 + 0.55 * var(--dx-footer-progress, 0));
+}
+
+/* Scrim keeps the copy readable without flattening the mural band below it. */
+.dx-footer-scrim {
+  position: absolute;
+  inset: 0;
+  /* The repeated noise tile dithers the large flat gradients: the 8-bit purple
+     ramp bands visibly on wide dark displays without it. */
+  background-image:
+    url("./assets/footer-grain.png"),
+    radial-gradient(96% 60% at 50% 62%, rgba(7, 6, 11, 0.9), rgba(7, 6, 11, 0) 72%);
+  background-repeat: repeat, no-repeat;
+  background-size: 160px 160px, auto;
+}
 
 .dx-footer-inner {
   position: relative;
   z-index: 2;
+  width: 100%;
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 22px var(--gutter) 30px;
+  /* Bottom padding is the mural-only band under the copy. It must stay small
+     enough that, at the end of the page, the whole block (name included) sits
+     inside the last viewport of this >=132vh-tall footer. */
+  padding: clamp(80px, 15vh, 190px) var(--gutter) clamp(80px, 13vh, 190px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 3vw, 34px);
+}
+
+.dx-footer-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.dx-footer-name {
+  margin: 0;
+  font-size: clamp(52px, min(13.5vw, 21vh), 190px);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+}
+.dx-footer-name-line {
+  display: block;
+  color: var(--purple-100);
+  /* Each line carries its own gradient slice so the ramp reads as one continuous
+     fall-off across both lines instead of restarting per line. */
+  background-image: linear-gradient(180deg, #f6f2ff 8%, #ddd6fe 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Progressive reveal: the word uncovers upwards as the footer is entered. */
+  clip-path: inset(calc((1 - var(--dx-fr-k, 1)) * 100%) 0 0 0);
+}
+.dx-footer-name-line + .dx-footer-name-line {
+  background-image: linear-gradient(180deg, #d5c9ff 0%, var(--purple-300) 58%, rgba(109, 40, 217, 0.42) 100%);
+}
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .dx-footer-name-line {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--purple-100);
+  }
+}
+
+.dx-footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px 32px;
+  margin-top: clamp(4px, 1.5vw, 16px);
+  padding-top: clamp(16px, 2.4vw, 26px);
+  border-top: 1px solid var(--line-soft);
+}
+.dx-footer-group-title {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.dx-footer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+.dx-footer-list a { color: var(--ink-dim); overflow-wrap: anywhere; }
+.dx-footer-list a:hover,
+.dx-footer-list a:focus-visible { color: var(--purple-100); }
+.dx-footer-top-link { color: var(--purple-300); }
+
+.dx-footer-signoff {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 24px;
-  justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  color: var(--ink-faint);
+  justify-content: space-between;
+  padding-top: clamp(14px, 2vw, 22px);
   border-top: 1px solid var(--line-soft);
-  background: rgba(7, 6, 11, 0.72);
+  font-size: 13px;
+  color: var(--ink-dim);
 }
 .dx-footer-brand { display: inline-flex; align-items: center; gap: 10px; }
 .dx-footer-avatar { border-radius: 50%; opacity: 0.85; }
+
+/* Scroll-driven progressive reveal (JS writes --dx-fr-k; 1 = fully revealed). */
+.dx-footer [data-fr-at] {
+  opacity: var(--dx-fr-k, 1);
+  transform: translate3d(0, calc((1 - var(--dx-fr-k, 1)) * 26px), 0);
+}
+
+@media (max-width: 940px) {
+  .dx-footer { min-height: max(120vh, 700px); }
+  .dx-footer-layer--spires img { bottom: 30%; }
+  .dx-footer-inner { padding-bottom: clamp(80px, 14vh, 170px); }
+}
+
+@media (max-width: 720px) {
+  .dx-footer-name { font-size: clamp(44px, min(19vw, 21vh), 96px); }
+  .dx-footer-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+  /* The email address is longer than a half-width cell, so the last group gets
+     the full row instead of breaking mid-word. */
+  .dx-footer-group:last-child { grid-column: 1 / -1; }
+  /* Phones: the sticky topbar wraps to ~3 rows here, so the mural-only band under
+     the copy shrinks to keep the giant name clear of it at the end of the page. */
+  .dx-footer-inner { padding-bottom: clamp(44px, 7vh, 120px); }
+}
+
+/* Short viewports (wide laptops, small phones): the copy column has to fit the
+   last viewport of the footer, so the rhythm closes up instead of pushing the
+   name behind the sticky header at the end of the page. */
+@media (max-height: 780px) {
+  .dx-footer-inner {
+    gap: clamp(14px, 2vw, 24px);
+    padding-top: clamp(60px, 11vh, 140px);
+    padding-bottom: clamp(56px, 9vh, 130px);
+  }
+  .dx-footer-name { font-size: clamp(44px, min(13.5vw, 21vh), 190px); }
+  .dx-footer-nav { margin-top: 4px; padding-top: 14px; }
+  .dx-footer-signoff { padding-top: 12px; }
+}
 
 /* ==========================================================================
    Responsive
@@ -538,9 +705,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 @media (max-width: 720px) {
   .dx-nav { flex-wrap: wrap; gap: 12px; }
   .dx-nav-links { order: 3; width: 100%; margin: 0; gap: 18px; overflow-x: auto; }
-  .dx-motion-btn { margin-left: auto; }
   .landing-feature-grid { grid-template-columns: minmax(0, 1fr); }
-  .dx-footer-inner { justify-content: flex-start; }
 }
 
 /* ==========================================================================
@@ -556,6 +721,13 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   .hw-feature-panel,
   .nw-mission-image,
   .hw-parallax { transform: none !important; }
+  /* Footer: no parallax drift, no staged reveal — every element is simply
+     present at its final position. */
+  .dx-footer [data-fr-at] { opacity: 1 !important; transform: none !important; }
+  .dx-footer-name-line { clip-path: none !important; }
+  .dx-footer-layer img { transform: none !important; }
+  .dx-footer-layer--color { opacity: 1 !important; }
+  .dx-footer-portal { transform: translateX(-50%) !important; opacity: 0.5 !important; }
 }
 
 html[data-reduced-motion="true"] .nw-hero-fade,
@@ -564,3 +736,8 @@ html[data-reduced-motion="true"] .hw-feature-panel,
 html[data-reduced-motion="true"] .nw-mission-image,
 html[data-reduced-motion="true"] .hw-parallax { transform: none !important; }
 html[data-reduced-motion="true"] .nw-mission-reveal[data-pending] { opacity: 1; transform: none; }
+html[data-reduced-motion="true"] .dx-footer [data-fr-at] { opacity: 1 !important; transform: none !important; }
+html[data-reduced-motion="true"] .dx-footer-name-line { clip-path: none !important; }
+html[data-reduced-motion="true"] .dx-footer-layer img { transform: none !important; }
+html[data-reduced-motion="true"] .dx-footer-layer--color { opacity: 1 !important; }
+html[data-reduced-motion="true"] .dx-footer-portal { transform: translateX(-50%) !important; opacity: 0.5 !important; }
