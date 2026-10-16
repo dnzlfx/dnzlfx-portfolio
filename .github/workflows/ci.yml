@@ -1,0 +1,37 @@
+name: Portfolio CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Syntax check app.js
+        run: node --check app.js
+
+      - name: Syntax check test_scroll_math.mjs
+        run: node --check test_scroll_math.mjs
+
+      - name: Run scroll math & asset test suite
+        run: node test_scroll_math.mjs
+
+      - name: Syntax check generate_assets.py
+        run: python3 -c "import ast; ast.parse(open('generate_assets.py', encoding='utf-8').read())"
+
+      - name: Whitespace check
+        run: git diff --check

@@ -13,8 +13,8 @@ no build step, no runtime dependencies.
   that fades into the page background.
 - **How I build** — three editorial rows on local-first autonomy, citation-verified
   retrieval, and the balance between architecture and interface.
-- **Projects** — a 2×2 grid of the four projects I want people to look at:
-  Vyn & Samantha, AppealForge, FoxTube and Physicsmon.
+- **Projects** — one featured card plus two companions, the three projects I want
+  people to look at: Vyn & Samantha, AppealForge and FoxTube.
 - **About** — bio, languages and frameworks.
 - **Contact** — email, GitHub, education.
 

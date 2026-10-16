@@ -717,20 +717,6 @@ def make_feature_card_art(index: int, name: str):
             d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=125 + (220 - r) // 2, width=3)
         d.polygon([(cx - 55, cy - 75), (cx - 55, cy + 75), (cx + 85, cy)], fill=235, outline=40)
         d.polygon([(cx - 35, cy - 45), (cx - 35, cy + 45), (cx + 50, cy)], fill=90)
-    else:
-        # Physicsmon: interactive 2D browser physics arena
-        for arc_i in range(6):
-            pts = []
-            for step in range(40):
-                t = step / 39.0
-                px = 60 + t * (w - 120)
-                py = h - 70 - (4 * t * (1 - t)) * (160 + arc_i * 38)
-                pts.append((px, py))
-            d.line(pts, fill=140 + arc_i * 20, width=3)
-        engraving_sphere(d, 190, 220, 62, light=(-0.5, -0.6, 0.6))
-        engraving_sphere(d, 450, 190, 52, light=(0.5, -0.6, 0.6))
-        starburst(d, cx, 165, 10, 95, 16, 250, width=3)
-
     img = img.filter(ImageFilter.GaussianBlur(radius=0.5))
     save_plate(img, f"feature-{name}")
 
@@ -742,6 +728,6 @@ if __name__ == "__main__":
     make_editorial_duo(1, "mission-duo-1")
     make_editorial_duo(2, "mission-duo-2")
     make_editorial_duo(3, "mission-duo-3")
-    for idx, slug in [(1, "vyn"), (3, "appealforge"), (4, "foxtube"), (6, "physicsmon")]:
+    for idx, slug in [(1, "vyn"), (3, "appealforge"), (4, "foxtube")]:
         make_feature_card_art(idx, slug)
     print("Generated all assets in", OUT_DIR)
