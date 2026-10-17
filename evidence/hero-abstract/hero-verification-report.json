@@ -1,0 +1,178 @@
+{
+  "timestamp": "2026-10-16T07:24:38.182Z",
+  "root": "/mnt/datos/proyectos/dnzlfx-portfolio-demo/.worktrees/hero-assets",
+  "baseUrl": "http://127.0.0.1:41889/",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "desktop": {
+    "heroPresent": true,
+    "plateImages": [
+      {
+        "src": "/assets/hero-abstract-mono.png",
+        "naturalWidth": 1024,
+        "naturalHeight": 1536,
+        "complete": true
+      },
+      {
+        "src": "/assets/hero-abstract-color.png",
+        "naturalWidth": 1024,
+        "naturalHeight": 1536,
+        "complete": true
+      }
+    ],
+    "plateAriaLabel": "Abstract dithered celestial composition: a luminous core ringed by orbital paths above a receding geometric data lattice. Hover or focus to reveal the electric purple duotone layer.",
+    "plateRect": {
+      "w": 461,
+      "h": 691,
+      "left": 785,
+      "right": 1246
+    },
+    "plateAspect": 0.667,
+    "copyTextSample": "Local-first AI systems, full-stack applications and the Linux infrastructure that runs them. I'm Christian Denzel — a 5t",
+    "heroHeading": "\n            Local-first AI systems, full-stack applications and the Linux\n            infrastructure that runs them.\n          ",
+    "anyAnimeAssetOnPage": false,
+    "docScrollWidth": 1440,
+    "viewportWidth": 1440,
+    "visibleOverflow": []
+  },
+  "initialReveal": {
+    "activeCount": 1,
+    "heroPlateActive": true,
+    "colorOpacity": "1"
+  },
+  "monoState": {
+    "colorOpacity": "0",
+    "monoOpacity": "1",
+    "monoNaturalW": 1024
+  },
+  "revealHover": {
+    "colorOpacity": "1"
+  },
+  "hoverOff": {
+    "colorOpacity": "0"
+  },
+  "revealFocus": {
+    "colorOpacity": "1",
+    "focused": "dx-hero-plate"
+  },
+  "mobile": {
+    "heroPresent": true,
+    "plateImages": [
+      {
+        "src": "/assets/hero-abstract-mono.png",
+        "naturalWidth": 1024,
+        "naturalHeight": 1536,
+        "complete": true
+      },
+      {
+        "src": "/assets/hero-abstract-color.png",
+        "naturalWidth": 1024,
+        "naturalHeight": 1536,
+        "complete": true
+      }
+    ],
+    "plateAriaLabel": "Abstract dithered celestial composition: a luminous core ringed by orbital paths above a receding geometric data lattice. Hover or focus to reveal the electric purple duotone layer.",
+    "plateRect": {
+      "w": 350,
+      "h": 525,
+      "left": 20,
+      "right": 370
+    },
+    "plateAspect": 0.667,
+    "copyTextSample": "Local-first AI systems, full-stack applications and the Linux infrastructure that runs them. I'm Christian Denzel — a 5t",
+    "heroHeading": "\n            Local-first AI systems, full-stack applications and the Linux\n            infrastructure that runs them.\n          ",
+    "anyAnimeAssetOnPage": false,
+    "docScrollWidth": 390,
+    "viewportWidth": 390,
+    "visibleOverflow": []
+  },
+  "viewportSweep": [
+    {
+      "w": 1440,
+      "doc": 1440,
+      "vw": 1440,
+      "plate": {
+        "w": 461,
+        "h": 691
+      },
+      "plateRight": 1246,
+      "overflow": 0,
+      "plateEscapes": false
+    },
+    {
+      "w": 1024,
+      "doc": 1024,
+      "vw": 1024,
+      "plate": {
+        "w": 409,
+        "h": 614
+      },
+      "plateRight": 973,
+      "overflow": 0,
+      "plateEscapes": false
+    },
+    {
+      "w": 768,
+      "doc": 768,
+      "vw": 768,
+      "plate": {
+        "w": 400,
+        "h": 600
+      },
+      "plateRight": 584,
+      "overflow": 0,
+      "plateEscapes": false
+    },
+    {
+      "w": 390,
+      "doc": 390,
+      "vw": 390,
+      "plate": {
+        "w": 350,
+        "h": 525
+      },
+      "plateRight": 370,
+      "overflow": 0,
+      "plateEscapes": false
+    },
+    {
+      "w": 360,
+      "doc": 360,
+      "vw": 360,
+      "plate": {
+        "w": 320,
+        "h": 480
+      },
+      "plateRight": 340,
+      "overflow": 0,
+      "plateEscapes": false
+    },
+    {
+      "w": 320,
+      "doc": 320,
+      "vw": 320,
+      "plate": {
+        "w": 280,
+        "h": 420
+      },
+      "plateRight": 300,
+      "overflow": 0,
+      "plateEscapes": false
+    }
+  ],
+  "verdict": {
+    "noConsoleErrors": true,
+    "noPageErrors": true,
+    "noFailedRequests": true,
+    "platesLoaded": true,
+    "platesAreAbstract": true,
+    "noAnimeOnPage": true,
+    "monoLayerRenders": true,
+    "revealOnHover": true,
+    "hoverOffRestoresMono": true,
+    "revealOnFocus": true,
+    "noOverflowAnyViewport": true,
+    "noPlateEscape": true
+  }
+}

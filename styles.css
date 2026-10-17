@@ -27,6 +27,7 @@
 
   --maxw: 1180px;
   --gutter: clamp(20px, 5vw, 64px);
+  --frame-inset: clamp(10px, 1.2vw, 16px);
 
   --nw-reveal-delay: 0ms;
 }
@@ -48,6 +49,7 @@ body {
   line-height: 1.65;
   letter-spacing: 0.005em;
   overflow-x: hidden;
+  padding: var(--frame-inset);
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -61,14 +63,14 @@ code {
   color: var(--purple-300);
   background: rgba(168, 85, 247, 0.09);
   border: 1px solid rgba(168, 85, 247, 0.16);
-  border-radius: 4px;
+  border-radius: 0;
   padding: 0.1em 0.34em;
 }
 
 :focus-visible {
   outline: 2px solid var(--purple-500);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .skip-link {
@@ -79,7 +81,7 @@ code {
   background: var(--purple-700);
   color: #fff;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 0;
   transition: top 0.18s ease;
 }
 .skip-link:focus { top: 12px; color: #fff; }
@@ -87,20 +89,18 @@ code {
 /* Ambient viewport frame -------------------------------------------------- */
 .dx-frame {
   position: fixed;
-  inset: 0;
+  inset: var(--frame-inset);
   pointer-events: none;
   z-index: 60;
-  box-shadow: inset 0 0 200px rgba(109, 40, 217, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 0;
 }
 
 /* Header ------------------------------------------------------------------ */
 .dx-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(14px);
-  background: linear-gradient(to bottom, rgba(7, 6, 11, 0.92), rgba(7, 6, 11, 0.62) 70%, rgba(7, 6, 11, 0));
-  border-bottom: 1px solid var(--line-soft);
+  position: static;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line);
 }
 
 .dx-nav {
@@ -113,7 +113,7 @@ code {
 }
 
 .dx-brand { display: inline-flex; align-items: center; gap: 11px; color: var(--ink); flex: 0 0 auto; }
-.dx-brand-avatar { border-radius: 50%; border: 1px solid var(--line); flex: 0 0 auto; }
+.dx-brand-avatar { border-radius: 0; border: 1px solid var(--line); flex: 0 0 auto; }
 .dx-brand-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
 .dx-brand-mark { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
 .dx-brand-name { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); letter-spacing: 0.07em; white-space: nowrap; }
@@ -129,19 +129,6 @@ code {
 .dx-nav-link { color: var(--ink-dim); font-size: 14px; }
 .dx-nav-link:hover { color: var(--purple-300); }
 .dx-nav-link--ext { display: inline-flex; align-items: center; gap: 4px; }
-
-.dx-motion-btn {
-  font: inherit;
-  font-size: 12px;
-  font-family: var(--font-mono);
-  color: var(--ink-dim);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 7px 14px;
-  cursor: pointer;
-}
-.dx-motion-btn:hover { color: var(--purple-300); border-color: var(--purple-700); }
 
 /* Stage ------------------------------------------------------------------- */
 .dx-stage { display: block; }
@@ -205,7 +192,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-btn {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 13px 24px;
   font-size: 15px;
   font-weight: 560;
@@ -260,7 +247,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .nw-mission-hero {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 0;
   min-height: clamp(220px, 34vw, 420px);
 }
 .nw-mission-hero img {
@@ -309,11 +296,11 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   font-size: 11.5px;
   color: var(--ink-dim);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 5px 12px;
 }
 
-.nw-mission-art { position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 840 / 520; }
+.nw-mission-art { position: relative; overflow: hidden; border-radius: 0; aspect-ratio: 840 / 520; }
 .nw-mission-art img {
   position: absolute;
   inset: 0;
@@ -363,11 +350,24 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   flex-direction: column;
   background: linear-gradient(180deg, var(--bg-panel), var(--bg-soft));
   border: 1px solid var(--line-soft);
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 .landing-feature:hover { border-color: var(--purple-900); transform: translateY(-2px); }
+
+/* Intentional three-project layout: one full-width featured card, two below --- */
+.landing-feature-grid > .landing-feature--featured { grid-column: 1 / -1; }
+.landing-feature--featured { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+.landing-feature--featured .landing-feature-top {
+  flex: 1 1 56%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.landing-feature--featured .landing-feature-art { flex: 1 1 42%; min-width: 0; margin-top: 0; }
+.landing-feature--featured .landing-feature-footer { flex: 1 0 100%; }
 
 .landing-feature-top { padding: clamp(20px, 2.4vw, 30px); }
 .landing-feature-lang {
@@ -427,7 +427,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-card-panel {
   background: var(--bg-soft);
   border: 1px solid var(--line-soft);
-  border-radius: 16px;
+  border-radius: 0;
   padding: clamp(24px, 3vw, 40px);
 }
 .dx-card-panel h2 { margin: 0 0 18px; font-size: clamp(24px, 3vw, 34px); font-weight: 630; }
@@ -452,7 +452,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   color: var(--ink);
   background: rgba(168, 85, 247, 0.08);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 6px 12px;
 }
 
@@ -479,47 +479,243 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 .dx-contact-plain { color: var(--ink-dim); font-size: 15px; }
 
 /* ==========================================================================
-   FOOTER — panoramic mural
+   FOOTER — immersive layered mural + progressive reveal
+   The mural is not a rectangular picture: every layer is RGBA art whose alpha
+   channel carries the glow, so the scene melts into the page background and the
+   site's own black/purple language instead of ending on a cropped rectangle.
    ========================================================================== */
 .dx-footer {
   position: relative;
-  margin-top: clamp(40px, 6vw, 90px);
-  border-top: 1px solid var(--line-soft);
+  isolation: isolate;
+  margin-top: clamp(48px, 7vw, 110px);
+  min-height: max(132vh, 780px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
+  background:
+    radial-gradient(130% 78% at 50% 106%, rgba(109, 40, 217, 0.26), rgba(7, 6, 11, 0) 64%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 46%, #0a0716 100%);
 }
+/* Section edge: hidden behind the mural the page keeps flowing; a full-width
+   rule would cap the art and make it read as a panel dropped into the page. */
+.dx-footer::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 1;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0) 0%,
+    rgba(167, 139, 250, 0.3) 50%,
+    rgba(167, 139, 250, 0) 100%
+  );
+}
+
 .dx-footer-mural {
-  position: relative;
-  height: clamp(200px, 30vw, 380px);
-  overflow: hidden;
-}
-.dx-footer-mural img {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
+  z-index: 0;
+  pointer-events: none;
 }
-.dx-footer-mural .nw-mission-color { opacity: 1; }
+.dx-footer-layer { position: absolute; inset: 0; }
+.dx-footer-layer img {
+  position: absolute;
+  left: -6%;
+  width: 112%;
+  max-width: none;
+  height: auto;
+  transform: translate3d(0, var(--dx-footer-drift, 0px), 0);
+}
+.dx-footer-layer--sky img { top: -4%; }
+.dx-footer-layer--spires img { bottom: 26%; }
+.dx-footer-layer--ridge img { bottom: -1%; }
+
+/* Duotone cross-fade: the purple variant lights up as the footer is entered. */
+.dx-footer-layer--color { opacity: var(--dx-footer-color-k, 0); }
+
+.dx-footer-portal {
+  position: absolute;
+  left: 50%;
+  bottom: -24%;
+  width: min(118vh, 1180px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(167, 139, 250, 0.14) 0 1.5px,
+    rgba(0, 0, 0, 0) 1.5px 5.6%
+  );
+  mask-image: radial-gradient(circle at 50% 50%, #000 26%, rgba(0, 0, 0, 0) 74%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 26%, rgba(0, 0, 0, 0) 74%);
+  transform: translateX(-50%) scale(calc(0.86 + 0.16 * var(--dx-footer-progress, 0)));
+  opacity: calc(0.22 + 0.55 * var(--dx-footer-progress, 0));
+}
+
+/* Scrim keeps the copy readable without flattening the mural band below it. */
+.dx-footer-scrim {
+  position: absolute;
+  inset: 0;
+  /* The repeated noise tile dithers the large flat gradients: the 8-bit purple
+     ramp bands visibly on wide dark displays without it. */
+  background-image:
+    url("./assets/footer-grain.png"),
+    radial-gradient(96% 60% at 50% 62%, rgba(7, 6, 11, 0.9), rgba(7, 6, 11, 0) 72%);
+  background-repeat: repeat, no-repeat;
+  background-size: 160px 160px, auto;
+}
 
 .dx-footer-inner {
   position: relative;
   z-index: 2;
+  width: 100%;
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 22px var(--gutter) 30px;
+  /* Bottom padding is the mural-only band under the copy. It must stay small
+     enough that, at the end of the page, the whole block (name included) sits
+     inside the last viewport of this >=132vh-tall footer. */
+  padding: clamp(80px, 15vh, 190px) var(--gutter) clamp(80px, 13vh, 190px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 3vw, 34px);
+}
+
+.dx-footer-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.dx-footer-name {
+  margin: 0;
+  font-size: clamp(52px, min(13.5vw, 21vh), 190px);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+}
+.dx-footer-name-line {
+  display: block;
+  color: var(--purple-100);
+  /* Each line carries its own gradient slice so the ramp reads as one continuous
+     fall-off across both lines instead of restarting per line. */
+  background-image: linear-gradient(180deg, #f6f2ff 8%, #ddd6fe 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Progressive reveal: the word uncovers upwards as the footer is entered. */
+  clip-path: inset(calc((1 - var(--dx-fr-k, 1)) * 100%) 0 0 0);
+}
+.dx-footer-name-line + .dx-footer-name-line {
+  background-image: linear-gradient(180deg, #d5c9ff 0%, var(--purple-300) 58%, rgba(109, 40, 217, 0.42) 100%);
+}
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .dx-footer-name-line {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--purple-100);
+  }
+}
+
+.dx-footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px 32px;
+  margin-top: clamp(4px, 1.5vw, 16px);
+  padding-top: clamp(16px, 2.4vw, 26px);
+  border-top: 1px solid var(--line-soft);
+}
+.dx-footer-group-title {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.dx-footer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+.dx-footer-list a { color: var(--ink-dim); overflow-wrap: anywhere; }
+.dx-footer-list a:hover,
+.dx-footer-list a:focus-visible { color: var(--purple-100); }
+.dx-footer-top-link { color: var(--purple-300); }
+
+.dx-footer-signoff {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 24px;
-  justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  color: var(--ink-faint);
+  justify-content: space-between;
+  padding-top: clamp(14px, 2vw, 22px);
   border-top: 1px solid var(--line-soft);
-  background: rgba(7, 6, 11, 0.72);
+  font-size: 13px;
+  color: var(--ink-dim);
 }
 .dx-footer-brand { display: inline-flex; align-items: center; gap: 10px; }
 .dx-footer-avatar { border-radius: 50%; opacity: 0.85; }
+
+/* Scroll-driven progressive reveal (JS writes --dx-fr-k; 1 = fully revealed). */
+.dx-footer [data-fr-at] {
+  opacity: var(--dx-fr-k, 1);
+  transform: translate3d(0, calc((1 - var(--dx-fr-k, 1)) * 26px), 0);
+}
+
+@media (max-width: 940px) {
+  .dx-footer { min-height: max(120vh, 700px); }
+  .dx-footer-layer--spires img { bottom: 30%; }
+  .dx-footer-inner { padding-bottom: clamp(80px, 14vh, 170px); }
+}
+
+@media (max-width: 720px) {
+  .dx-footer-name { font-size: clamp(44px, min(19vw, 21vh), 96px); }
+  .dx-footer-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+  /* The email address is longer than a half-width cell, so the last group gets
+     the full row instead of breaking mid-word. */
+  .dx-footer-group:last-child { grid-column: 1 / -1; }
+  /* Phones: the sticky topbar wraps to ~3 rows here, so the mural-only band under
+     the copy shrinks to keep the giant name clear of it at the end of the page
+     (measured: the name's line box must stay below the sticky header's bottom). */
+  .dx-footer-inner { padding-bottom: clamp(18px, 3vh, 64px); }
+}
+
+/* Short viewports (wide laptops, small phones): the copy column has to fit the
+   last viewport of the footer, so the rhythm closes up instead of pushing the
+   name behind the sticky header at the end of the page. */
+@media (max-height: 780px) {
+  .dx-footer-inner {
+    gap: clamp(14px, 2vw, 24px);
+    padding-top: clamp(60px, 11vh, 140px);
+    padding-bottom: clamp(56px, 9vh, 130px);
+  }
+  .dx-footer-name { font-size: clamp(44px, min(13.5vw, 21vh), 190px); }
+  .dx-footer-nav { margin-top: 4px; padding-top: 14px; }
+  .dx-footer-signoff { padding-top: 12px; }
+}
+
+/* Very short / very narrow phones (320x568 class): the sticky topbar wraps to
+   three rows there (159px at 320x568), so the last viewport of the mural only
+   offers ~409px to the copy. The rhythm below closes up instead (type sizes are
+   untouched) so that the giant name and all 13 real links finish the scroll
+   clear of the topbar. Measured at 320x568: copy top 178px vs topbar bottom
+   159px, 13/13 links clickable (Chromium, evidence/footer-h1-author/). */
+@media (max-width: 720px) and (max-height: 780px), (max-width: 344px) {
+  .dx-footer-inner { gap: 5px; padding-bottom: 12px; }
+  .dx-footer-kicker { line-height: 1.15; }
+  .dx-footer-name { font-size: clamp(27px, 8.8vw, 44px); }
+  .dx-footer-nav { gap: 4px 14px; margin-top: 0; padding-top: 4px; }
+  .dx-footer-group-title { margin-bottom: 2px; line-height: 1.2; }
+  .dx-footer-list { gap: 3px; line-height: 1.2; }
+  .dx-footer-signoff { flex-direction: column; align-items: flex-start; gap: 3px; padding-top: 2px; line-height: 1.25; }
+}
 
 /* ==========================================================================
    Responsive
@@ -538,9 +734,19 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
 @media (max-width: 720px) {
   .dx-nav { flex-wrap: wrap; gap: 12px; }
   .dx-nav-links { order: 3; width: 100%; margin: 0; gap: 18px; overflow-x: auto; }
-  .dx-motion-btn { margin-left: auto; }
   .landing-feature-grid { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked featured card: column + nowrap. A wrapping column flex would spill
+     the footer into a second column outside the card. */
+  .landing-feature--featured { flex-direction: column; flex-wrap: nowrap; }
+  .landing-feature--featured .landing-feature-top { flex: 0 0 auto; }
+  .landing-feature--featured .landing-feature-art { flex: 0 0 auto; margin-top: auto; }
+  .landing-feature--featured .landing-feature-footer { flex: 0 0 auto; }
   .dx-footer-inner { justify-content: flex-start; }
+}
+
+@media (max-width: 480px) {
+  /* Very small screens: links wrap onto a second row instead of scrolling sideways */
+  .dx-nav-links { flex-wrap: wrap; overflow-x: visible; row-gap: 8px; }
 }
 
 /* ==========================================================================
@@ -556,6 +762,13 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
   .hw-feature-panel,
   .nw-mission-image,
   .hw-parallax { transform: none !important; }
+  /* Footer: no parallax drift, no staged reveal — every element is simply
+     present at its final position. */
+  .dx-footer [data-fr-at] { opacity: 1 !important; transform: none !important; }
+  .dx-footer-name-line { clip-path: none !important; }
+  .dx-footer-layer img { transform: none !important; }
+  .dx-footer-layer--color { opacity: 1 !important; }
+  .dx-footer-portal { transform: translateX(-50%) !important; opacity: 0.5 !important; }
 }
 
 html[data-reduced-motion="true"] .nw-hero-fade,
@@ -564,3 +777,8 @@ html[data-reduced-motion="true"] .hw-feature-panel,
 html[data-reduced-motion="true"] .nw-mission-image,
 html[data-reduced-motion="true"] .hw-parallax { transform: none !important; }
 html[data-reduced-motion="true"] .nw-mission-reveal[data-pending] { opacity: 1; transform: none; }
+html[data-reduced-motion="true"] .dx-footer [data-fr-at] { opacity: 1 !important; transform: none !important; }
+html[data-reduced-motion="true"] .dx-footer-name-line { clip-path: none !important; }
+html[data-reduced-motion="true"] .dx-footer-layer img { transform: none !important; }
+html[data-reduced-motion="true"] .dx-footer-layer--color { opacity: 1 !important; }
+html[data-reduced-motion="true"] .dx-footer-portal { transform: translateX(-50%) !important; opacity: 0.5 !important; }

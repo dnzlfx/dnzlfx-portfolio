@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 /**
- * Self-contained verification test suite for dnzlfx-portfolio-demo scroll & parallax math.
- * Run with: node /mnt/datos/proyectos/dnzlfx-portfolio-demo/test_scroll_math.mjs
+ * Self-contained verification test suite for dnzlfx-portfolio-demo scroll, parallax
+ * and footer-mural math. No dependencies: pure Node + the real app module.
+ *
+ * The test resolves its own directory from import.meta.url so it always validates the
+ * checkout it lives in (no hardcoded absolute path). Run with: node test_scroll_math.mjs
  */
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   clamp,
   computeViewportRatio,
@@ -13,14 +17,18 @@ import {
   computeFeatureImageShiftPx,
   computeHeroMetrics,
   computePanelOverlapPx,
+  computeFooterProgress,
+  computeFooterLayerOffsetPx,
+  computeRevealFactor,
   isNearViewportCenter,
   lerp,
   damp,
   TRANSFORM_LAMBDA,
-  WHEEL_LAMBDA,
 } from "./app.js";
 
-const dir = "/mnt/datos/proyectos/dnzlfx-portfolio-demo";
+// Native URL -> path conversion for the file that is actually running. Resolves the real
+// branch tree being tested instead of whatever checkout happens to sit at a fixed path.
+const dir = path.dirname(fileURLToPath(import.meta.url));
 
 // 1. Test clamp
 assert.equal(clamp(5, -1, 1), 1);
@@ -90,26 +98,171 @@ let b = 0;
 for (let i = 0; i < 120; i++) a = damp(a, 100, 12, 1 / 120);
 for (let i = 0; i < 60; i++) b = damp(b, 100, 12, 1 / 60);
 assert.ok(Math.abs(a - b) < 1e-6, `frame-rate independence failed: ${a} vs ${b}`);
-assert.ok(WHEEL_LAMBDA > 0 && TRANSFORM_LAMBDA > WHEEL_LAMBDA);
+assert.ok(TRANSFORM_LAMBDA > 0, "TRANSFORM_LAMBDA must be a positive smoothing rate");
 
-// 10. Verify all referenced assets in index.html exist on disk
+// 10. Footer (PR2) mural math: entry progress, layer drift, staged reveal
+// Progress is 0 while the footer is still below the viewport...
+assert.equal(computeFooterProgress(900, 1400, 900), 0);
+// ...0.5 when half of it has been revealed...
+assert.ok(Math.abs(computeFooterProgress(200, 1400, 900) - 0.5) < 1e-9);
+// ...and clamps at 1 once the footer bottom reaches the viewport bottom.
+assert.equal(computeFooterProgress(-700, 1400, 900), 1);
+assert.equal(computeFooterProgress(-5000, 1400, 900), 1);
+// Degenerate inputs never produce NaN.
+assert.equal(computeFooterProgress(0, 0, 900), 0);
+assert.equal(computeFooterProgress(0, -10, 0), 0);
+
+// Layer drift is symmetric around progress 0.5 and bounded by `travel`.
+assert.equal(computeFooterLayerOffsetPx(0, 60), 30);
+assert.ok(Math.abs(computeFooterLayerOffsetPx(0.5, 60)) < 1e-12);
+assert.equal(computeFooterLayerOffsetPx(1, 60), -30);
+assert.equal(computeFooterLayerOffsetPx(2, 60), -30);
+assert.equal(computeFooterLayerOffsetPx(0.3, undefined), 0);
+assert.equal(computeFooterLayerOffsetPx(0.3, NaN), 0);
+
+// Staged reveal: hidden before `at`, linear across `span`, fully revealed after.
+assert.equal(computeRevealFactor(0.1, 0.3, 0.2), 0);
+assert.ok(Math.abs(computeRevealFactor(0.4, 0.3, 0.2) - 0.5) < 1e-9);
+assert.equal(computeRevealFactor(0.5, 0.3, 0.2), 1);
+assert.equal(computeRevealFactor(0.9, 0.3, 0.2), 1);
+// Zero-width span degrades to a step so the reveal still terminates.
+assert.equal(computeRevealFactor(0.29, 0.3, 0), 0);
+assert.equal(computeRevealFactor(0.3, 0.3, 0), 1);
+// Every reveal stage used by index.html must be reachable inside [0, 1].
+assert.equal(computeRevealFactor(1, 0.46, 0.22), 1);
+
+
+// 11. Static verification of index.html / styles.css / app.js
 const html = fs.readFileSync(path.join(dir, "index.html"), "utf8");
+const css = fs.readFileSync(path.join(dir, "styles.css"), "utf8");
+const appSrc = fs.readFileSync(path.join(dir, "app.js"), "utf8");
 const assetMatches = [...html.matchAll(/(?:src|href)="\.\/assets\/([^"]+)"/g)].map((m) => m[1]);
+
+// 11a. Exactly three project cards, counted SEMANTICALLY. The old
+// /class="landing-feature"/g regex undercounted them because the featured card is
+// `class="landing-feature landing-feature--featured"`, so it matched only 2. Count
+// real <article class="landing-feature..."> elements instead.
+const featureCards = [...html.matchAll(/<article class="landing-feature[^"]*">[\s\S]*?<\/article>/g)];
+assert.equal(featureCards.length, 3, `Expected exactly 3 project cards, found ${featureCards.length}`);
+
+// 11b. Those cards must link EXACTLY the real set of project repositories -- no
+// missing links, no unexpected extras.
+const expectedRepos = new Set([
+  "https://github.com/dnzlfx/Vyn",
+  "https://github.com/dnzlfx/Samantha",
+  "https://github.com/dnzlfx/Impact_Forge-AppealForge",
+  "https://github.com/dnzlfx/FoxTube",
+]);
+const cardLinks = new Set();
+for (const [block] of featureCards) {
+  for (const m of block.matchAll(/href="(https:\/\/github\.com\/dnzlfx\/[^"]+)"/g)) {
+    cardLinks.add(m[1]);
+  }
+}
+const missingRepos = [...expectedRepos].filter((u) => !cardLinks.has(u));
+const extraRepos = [...cardLinks].filter((u) => !expectedRepos.has(u));
+assert.deepEqual(missingRepos, [], `Project cards are missing repo links: ${missingRepos.join(", ")}`);
+assert.deepEqual(extraRepos, [], `Project cards link unexpected repos: ${extraRepos.join(", ")}`);
+
+// 11c. No template/debug chrome may survive in the shipped markup.
 assert.ok(assetMatches.length >= 25, `Expected at least 25 asset tags, found ${assetMatches.length}`);
 assert.ok(assetMatches.includes("favicon-32.png"), "Missing favicon-32.png in index.html");
 assert.ok(assetMatches.includes("dnzlfx-avatar.png"), "Missing dnzlfx-avatar.png in index.html");
-assert.ok(assetMatches.includes("hero-anime-mono.png") && assetMatches.includes("hero-anime-color.png"), "Missing hero anime plate assets in index.html");
-assert.ok(assetMatches.includes("footer-anime-mono.png") && assetMatches.includes("footer-anime-color.png"), "Missing footer mural assets in index.html");
-const featureCards = (html.match(/class="landing-feature"/g) || []).length;
-assert.equal(featureCards, 4, `Expected 4 project cards, found ${featureCards}`);
+assert.ok(assetMatches.includes("hero-abstract-mono.png") && assetMatches.includes("hero-abstract-color.png"), "Missing hero abstract plate assets in index.html");
+assert.ok(assetMatches.includes("footer-sky-mono.png") && assetMatches.includes("footer-sky-color.png"), "Missing footer mural sky layers in index.html");
 for (const banned of ["PROTOTYPE DEMO", "PROTOTYPE NOTICE", "DEMONSTRATION SHOWCASE", "dx-hud", "landing-feature-drift-readout", "nw-mission-index", "nw-art-tag", "dx-eyebrow"]) {
   assert.ok(!html.includes(banned), `index.html still contains banned template marker: ${banned}`);
 }
+
+// 11d. Asset integrity. Every ./assets/... reference must resolve to a real file on
+// disk larger than 1000 bytes -- checked individually, never as a loose ">= N".
+assert.equal(assetMatches.length, 27, `Expected exactly 27 asset references, found ${assetMatches.length}`);
+
+// Assets that must ship regardless of how the markup links them.
+const requiredAssets = [
+  "favicon-32.png",
+  "dnzlfx-avatar.png",
+  "hero-abstract-mono.png",
+  "hero-abstract-color.png",
+  "footer-sky-mono.png",
+  "footer-sky-color.png",
+  "footer-spires-mono.png",
+  "footer-spires-color.png",
+  "footer-ridge-mono.png",
+  "footer-ridge-color.png",
+  "feature-vyn-mono.png",
+  "feature-vyn-color.png",
+  "feature-samantha-mono.png",
+  "feature-samantha-color.png",
+  "feature-appealforge-mono.png",
+  "feature-appealforge-color.png",
+  "feature-foxtube-mono.png",
+  "feature-foxtube-color.png",
+];
+for (const file of requiredAssets) {
+  const fullPath = path.join(dir, "assets", file);
+  assert.ok(fs.existsSync(fullPath), `Missing required asset file: ${fullPath}`);
+  const stat = fs.statSync(fullPath);
+  assert.ok(stat.size > 1000, `Asset file suspiciously small: ${fullPath} (${stat.size} bytes)`);
+}
+// The assets the markup actually references must be among what index.html links.
+for (const file of ["favicon-32.png", "dnzlfx-avatar.png", "hero-abstract-mono.png", "hero-abstract-color.png", "footer-sky-mono.png", "footer-sky-color.png"]) {
+  assert.ok(assetMatches.includes(file), `index.html does not reference expected asset: ${file}`);
+}
+// Every referenced asset must exist on disk and be > 1000 bytes.
 for (const file of assetMatches) {
   const fullPath = path.join(dir, "assets", file);
   assert.ok(fs.existsSync(fullPath), `Missing asset file: ${fullPath}`);
   const stat = fs.statSync(fullPath);
-  assert.ok(stat.size > 1000, `Asset file suspiciously small: ${fullPath}`);
+  assert.ok(stat.size > 1000, `Asset file suspiciously small: ${fullPath} (${stat.size} bytes)`);
 }
 
-console.log(`PASS: All 10 assertion suites (${assetMatches.length} image bindings verified) succeeded.`);
+// 12. Footer markup contract: giant mural, real navigation, accessible name
+assert.match(html, /<footer class="dx-footer" id="footer" aria-labelledby="footer-heading">/, "footer must be a labelled landmark");
+assert.match(html, /<h2 class="dx-footer-name" id="footer-heading">/, "footer needs its giant name heading");
+assert.ok((html.match(/class="dx-footer-name-line"/g) || []).length >= 2, "giant name must be split into reveal lines");
+assert.match(html, /<nav class="dx-footer-nav" aria-label="Footer navigation">/, "footer navigation needs an accessible name");
+for (const target of ["#top", "#architecture", "#projects", "#about", "#contact"]) {
+  assert.ok(html.includes(`href="${target}"`), `footer must link to ${target}`);
+}
+for (const repo of ["Vyn", "Samantha", "Impact_Forge-AppealForge", "FoxTube"]) {
+  assert.ok(html.includes(`https://github.com/dnzlfx/${repo}"`), `footer must link the real ${repo} repository`);
+}
+assert.ok(html.includes('href="mailto:guzmanramirezchristian@outlook.com"'), "footer must keep the real contact email");
+assert.ok(html.includes('href="https://github.com/dnzlfx"'), "footer must link the GitHub profile");
+
+// The footer mural is a set of transparent artwork layers, never one cropped rectangle.
+const footerLayers = [...html.matchAll(/<div class="dx-footer-layer[^"]*"[^>]*data-drift="(\d+)">/g)];
+assert.equal(footerLayers.length, 6, `Expected 6 footer mural layers, found ${footerLayers.length}`);
+assert.ok(footerLayers.every((m) => Number(m[1]) > 0), "every mural layer needs a drift travel");
+for (const layer of ["footer-sky", "footer-spires", "footer-ridge"]) {
+  assert.ok(assetMatches.includes(`${layer}-mono.png`), `Missing ${layer}-mono.png binding in index.html`);
+  assert.ok(assetMatches.includes(`${layer}-color.png`), `Missing ${layer}-color.png binding in index.html`);
+}
+assert.ok(!assetMatches.includes("footer-anime-mono.png") && !assetMatches.includes("footer-anime-color.png"), "the old cropped footer plate must be gone from index.html");
+
+// Reveal stages must stay inside the [0, 1] progress range and be ordered.
+const revealStages = [...html.matchAll(/data-fr-at="([\d.]+)"/g)].map((m) => Number(m[1]));
+assert.ok(revealStages.length >= 6, `Expected staged footer reveal markers, found ${revealStages.length}`);
+assert.ok(revealStages.every((s) => s >= 0 && s <= 1), "reveal stages must live in [0, 1]");
+assert.ok(revealStages.some((s) => s > 0 && s < 0.2), "the giant name must reveal early in the footer entry");
+
+// Motion is permanent (no visible toggle) and never hijacks the wheel.
+assert.ok(!html.includes("motion-toggle"), "the motion toggle button must be gone from index.html");
+assert.ok(!html.includes("dx-motion-btn"), "the motion toggle styling hook must be gone from index.html");
+assert.ok(!appSrc.includes("WHEEL_LAMBDA"), "the wheel-hijack constant must be gone from app.js");
+assert.ok(!/addEventListener\(\s*["']wheel["']/.test(appSrc), "app.js must not listen for wheel events");
+assert.ok(!/\.preventDefault\(\)/.test(appSrc), "app.js must never preventDefault (no scroll hijack)");
+assert.ok(appSrc.includes('matchMedia("(prefers-reduced-motion: reduce)")'), "app.js must honour prefers-reduced-motion");
+
+// Footer layout contract: taller than the viewport, self-contained responsive rules,
+// and a reduced-motion escape hatch for the reveal/drift.
+assert.ok(/\.dx-footer\s*\{[^}]*min-height:\s*max\(1[23][0-9]vh/.test(css), ".dx-footer must be taller than one viewport");
+assert.ok(/\.dx-footer-name\s*\{[^}]*font-size:\s*clamp\([^)]*vw[^)]*\)/.test(css), ".dx-footer-name must scale with the viewport");
+assert.ok(/\.dx-footer-layer img\s*\{[^}]*var\(--dx-footer-drift/.test(css), "mural layers must consume --dx-footer-drift");
+assert.ok(/@media \(prefers-reduced-motion: reduce\) \{[^@]*\.dx-footer \[data-fr-at\] \{ opacity: 1 !important; transform: none !important; \}/.test(css), "reduced motion must disable the footer reveal");
+assert.ok(/\.dx-footer \[data-fr-at\] \{[^}]*var\(--dx-fr-k/.test(css), "footer reveal must consume --dx-fr-k");
+
+console.log(
+  `PASS: All 12 assertion suites (${featureCards.length} project cards, ${assetMatches.length} asset bindings, ${footerLayers.length} mural layers, ${revealStages.length} reveal stages) succeeded.`
+);

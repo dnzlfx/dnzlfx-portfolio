@@ -93,8 +93,40 @@ export function damp(current, target, lambda, dt) {
 
 /** Transform smoothing rate (1/s) — how fast --nw-* / --py-img chase real scroll. */
 export const TRANSFORM_LAMBDA = 14;
-/** Wheel momentum rate (1/s) — Lenis-like inertial page scroll. */
-export const WHEEL_LAMBDA = 9;
+
+/**
+ * Footer (PR C) — normalized entry progress.
+ * 0 when the footer's top edge sits at the viewport bottom, 1 once its bottom
+ * edge has reached the viewport bottom. Clamped to [0, 1].
+ */
+export function computeFooterProgress(rectTop, rectHeight, viewportHeight) {
+  if (!(rectHeight > 0)) return 0;
+  return clamp((viewportHeight - rectTop) / rectHeight, 0, 1);
+}
+
+/**
+ * Footer layer drift: `travelPx` is the total vertical travel of one mural layer
+ * across the whole footer, symmetric around progress 0.5 (negative = layer rises
+ * faster than the page as the footer is entered).
+ */
+export function computeFooterLayerOffsetPx(progress, travelPx) {
+  const p = clamp(progress, 0, 1);
+  const travel = Number.isFinite(travelPx) ? travelPx : 0;
+  return (0.5 - p) * travel;
+}
+
+/**
+ * Staged reveal factor for the progressive footer reveal: 0 before `at`,
+ * 1 after `at + span`, linear in between (so the giant name uncovers upwards
+ * as the footer scrolls into view).
+ */
+export function computeRevealFactor(progress, at, span) {
+  const p = clamp(progress, 0, 1);
+  const start = Number.isFinite(at) ? at : 0;
+  const width = Number.isFinite(span) && span > 0 ? span : 0;
+  if (width === 0) return p >= start ? 1 : 0;
+  return clamp((p - start) / width, 0, 1);
+}
 
 /**
  * Initialize DOM bindings when running in a real browser environment.
@@ -104,30 +136,15 @@ export function initPortfolioScroll() {
 
   const root = document.documentElement;
   const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const motionBtn = document.getElementById("motion-toggle");
-  const motionLabel = document.getElementById("motion-label");
 
-  let manualReduced = false;
-  const isReducedMotion = () => manualReduced || motionMedia.matches;
+  // Motion is on by default and stays that way: the ONLY thing that turns it off
+  // is the visitor's own OS/browser `prefers-reduced-motion` setting.
+  const isReducedMotion = () => motionMedia.matches;
 
   function syncMotionAttribute() {
-    const reduced = isReducedMotion();
-    root.setAttribute("data-reduced-motion", reduced ? "true" : "false");
-    if (motionLabel) {
-      motionLabel.textContent = reduced ? "Motion: Reduced" : "Motion: Fluid";
-    }
-    if (motionBtn) {
-      motionBtn.setAttribute("aria-pressed", reduced ? "true" : "false");
-    }
+    root.setAttribute("data-reduced-motion", isReducedMotion() ? "true" : "false");
   }
 
-  if (motionBtn) {
-    motionBtn.addEventListener("click", () => {
-      manualReduced = !isReducedMotion();
-      syncMotionAttribute();
-      scheduleTick();
-    });
-  }
   motionMedia.addEventListener("change", () => {
     syncMotionAttribute();
     scheduleTick();
@@ -141,6 +158,10 @@ export function initPortfolioScroll() {
   const featurePanelWrap = document.querySelector(".hw-feature-parallax");
   const featureFigures = Array.from(document.querySelectorAll(".landing-feature-art > figure"));
   const revealNodes = Array.from(document.querySelectorAll(".nw-mission-reveal"));
+  // Footer (PR C): mural layers drift on scroll, copy reveals in stages.
+  const footerEl = document.querySelector(".dx-footer");
+  const footerDriftNodes = footerEl ? Array.from(footerEl.querySelectorAll("[data-drift]")) : [];
+  const footerRevealNodes = footerEl ? Array.from(footerEl.querySelectorAll("[data-fr-at]")) : [];
 
   // Mecanismo 4: IntersectionObserver staggered reveal (data-pending removal)
   if ("IntersectionObserver" in window && !isReducedMotion()) {
@@ -165,30 +186,12 @@ export function initPortfolioScroll() {
   }
 
   // ---------------------------------------------------------------------------
-  // Smooth inertial state (Lenis-like wheel damping + damped CSS-var transforms).
-  // Native scroll is preserved: the wheel target is animated onto the real scroll
-  // position via rAF, so scrollbar, keyboard, anchors and touch all keep working.
+  // Damped transform state. The document scroll itself is 100% native; only the
+  // decorative CSS variables below chase the real scroll position via rAF.
   // ---------------------------------------------------------------------------
   let smoothScrollY = window.scrollY;
   let rafId = 0;
   let lastTs = 0;
-  let wheelTarget = window.scrollY;
-  let wheelActive = false;
-
-  const maxScrollY = () =>
-    Math.max(0, (document.documentElement.scrollHeight || 0) - (window.innerHeight || 0));
-
-  // Do not hijack wheel gestures aimed at a genuinely scrollable child element.
-  function isInsideScrollable(node) {
-    let el = node instanceof Element ? node : null;
-    while (el && el !== document.body && el !== root) {
-      const style = window.getComputedStyle(el);
-      const oy = style.overflowY;
-      if ((oy === "auto" || oy === "scroll") && el.scrollHeight > el.clientHeight + 1) return true;
-      el = el.parentElement;
-    }
-    return false;
-  }
 
   function updateFrame(ts) {
     rafId = 0;
@@ -201,8 +204,6 @@ export function initPortfolioScroll() {
 
     if (isReducedMotion()) {
       smoothScrollY = window.scrollY;
-      wheelTarget = smoothScrollY;
-      wheelActive = false;
       lastTs = 0;
       for (const el of heroFadeNodes) el.style.setProperty("--nw-hero-progress", "0");
       for (const el of heroParallaxNodes) el.style.setProperty("--py-hero", "0px");
@@ -217,28 +218,22 @@ export function initPortfolioScroll() {
           img.style.setProperty("--py-img", "0px");
         }
       }
+      if (footerEl) {
+        footerEl.style.setProperty("--dx-footer-progress", "1");
+        footerEl.style.setProperty("--dx-footer-color-k", "1");
+        for (const layer of footerDriftNodes) layer.style.setProperty("--dx-footer-drift", "0px");
+        for (const node of footerRevealNodes) node.style.setProperty("--dx-fr-k", "1");
+      }
       return;
     }
 
-    // 0. Lenis-like inertial wheel scrolling: animate the real scroll position
-    //    towards the accumulated wheel target with frame-rate independent damping.
-    if (wheelActive) {
-      wheelTarget = clamp(wheelTarget, 0, maxScrollY());
-      const cur = window.scrollY;
-      const next = damp(cur, wheelTarget, WHEEL_LAMBDA, dt);
-      if (Math.abs(wheelTarget - next) < 0.4) {
-        if (Math.abs(wheelTarget - cur) > 0.01) window.scrollTo(0, wheelTarget);
-        wheelActive = false;
-      } else {
-        window.scrollTo(0, next);
-        needMore = true;
-      }
-    }
-
+    // 0. Native scroll: the page is never intercepted, so wheel / trackpad /
+    //    keyboard / anchors / touch all move the document themselves. Only the
+    //    decorative transforms chase the real scroll position (damped below).
     const targetScrollY = window.scrollY;
 
     // Damped interpolation for silky-smooth variable transforms (no stair-steps
-    // on discrete wheel jumps). Frame-rate independent via damp().
+    // on discrete scroll deltas). Frame-rate independent via damp().
     if (Math.abs(targetScrollY - smoothScrollY) <= 0.15) {
       smoothScrollY = targetScrollY;
     } else {
@@ -314,7 +309,37 @@ export function initPortfolioScroll() {
       }
     }
 
-    // Keep the rAF loop alive while wheel momentum or transform damping is converging
+    // 5. Footer mural (PR C): entry progress drives the layer drift, the purple
+    //    duotone cross-fade and the staged reveal of name / nav / sign-off.
+    if (footerEl) {
+      const fRect = footerEl.getBoundingClientRect();
+      const fTop = fRect.top - scrollOffset;
+      if (fRect.bottom > -vh && fTop < vh * 2) {
+        const footerProgress = computeFooterProgress(fTop, fRect.height, vh);
+        footerEl.style.setProperty("--dx-footer-progress", footerProgress.toFixed(4));
+        footerEl.style.setProperty(
+          "--dx-footer-color-k",
+          computeRevealFactor(footerProgress, 0.32, 0.42).toFixed(4)
+        );
+        for (const layer of footerDriftNodes) {
+          const travel = Number(layer.dataset.drift || 0);
+          layer.style.setProperty(
+            "--dx-footer-drift",
+            `${computeFooterLayerOffsetPx(footerProgress, travel).toFixed(2)}px`
+          );
+        }
+        for (const node of footerRevealNodes) {
+          const at = Number(node.dataset.frAt);
+          const span = Number(node.dataset.frSpan || 0.18);
+          node.style.setProperty(
+            "--dx-fr-k",
+            computeRevealFactor(footerProgress, at, span).toFixed(4)
+          );
+        }
+      }
+    }
+
+    // Keep the rAF loop alive while transform damping is still converging
     if (needMore || Math.abs(targetScrollY - smoothScrollY) > 0.15) {
       rafId = window.requestAnimationFrame(updateFrame);
     }
@@ -326,32 +351,11 @@ export function initPortfolioScroll() {
     }
   }
 
-  // Lenis-like wheel damping. Ctrl/Cmd+wheel (pinch zoom) and nested scrollable
-  // containers are left to the browser; reduced motion disables it entirely.
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      if (isReducedMotion() || e.ctrlKey || e.metaKey || e.cancelable === false) return;
-      if (isInsideScrollable(e.target)) return;
-      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight || 1 : 1;
-      const next = clamp(wheelTarget + e.deltaY * unit, 0, maxScrollY());
-      e.preventDefault();
-      wheelTarget = next;
-      wheelActive = true;
-      scheduleTick();
-    },
-    { passive: false }
-  );
-
-  window.addEventListener(
-    "scroll",
-    () => {
-      // Re-sync when the scroll was native/programmatic (scrollbar, keyboard, anchors)
-      if (!wheelActive) wheelTarget = window.scrollY;
-      scheduleTick();
-    },
-    { passive: true }
-  );
+  // No wheel listener, no preventDefault, no scroll animation queue: a fast wheel
+  // flick, a trackpad swipe, PageDown, Space or an anchor jump all land instantly
+  // and only schedule one frame of decorative transform work. Reduced motion
+  // (OS-level) still skips the transforms entirely.
+  window.addEventListener("scroll", scheduleTick, { passive: true });
   window.addEventListener("resize", scheduleTick, { passive: true });
   scheduleTick();
 }
